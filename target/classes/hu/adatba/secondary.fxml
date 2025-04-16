@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.SecondaryController">
-    <children>
-        <Label text="Secondary View" />
-        <Button fx:id="secondaryButton" text="Switch to Primary View" onAction="#switchToPrimary" />
-    </children>
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
-</VBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="555.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.SecondaryController">
+   <children>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text layoutX="202.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Felhasználónév" />
+      <Text layoutX="212.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Regisztráció">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Text>
+      <Text layoutX="202.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail" />
+      <Text layoutX="202.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telefonszám" />
+      <Text layoutX="203.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelszó" />
+      <Text layoutX="204.0" layoutY="299.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelszó mégegyszer" />
+      <TextField fx:id="reguserTF" layoutX="204.0" layoutY="116.0" prefHeight="25.0" prefWidth="159.0" />
+      <TextField fx:id="regemailTF" layoutX="204.0" layoutY="165.0" prefHeight="25.0" prefWidth="159.0" />
+      <TextField fx:id="regphoneTF" layoutX="202.0" layoutY="209.0" prefHeight="25.0" prefWidth="159.0" />
+      <TextField fx:id="regpwTF" layoutX="202.0" layoutY="255.0" prefHeight="25.0" prefWidth="159.0" />
+      <TextField fx:id="regpwagainTF" layoutX="204.0" layoutY="310.0" prefHeight="25.0" prefWidth="159.0" />
+      <Button layoutX="201.0" layoutY="351.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="OK" />
+      <Button layoutX="311.0" layoutY="351.0" mnemonicParsing="false" onAction="#switchToPrimary" prefHeight="25.0" prefWidth="56.0" text="Mégse" />
+   </children>
+</AnchorPane>

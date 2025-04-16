@@ -1,0 +1,19 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+.idea_modules/
+
+# JetBrains Rider
+.idea/.idea.*
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
