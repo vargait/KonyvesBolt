@@ -71,4 +71,21 @@ public class UserDAO {
         }
         return null;
     }
+
+    // Felhasználó módosítása DB-ben
+    public boolean update(User user) {
+        String sql = "UPDATE FELHASZNALO SET FELHASZNALONEV = ?, EMAIL = ?, JELSZO = ? WHERE USERID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getEmail());
+            stmt.setString(3, user.getPassword());
+            stmt.setInt(4, user.getUserID());
+
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Felhasznalo modositasa sikertelen: ", e);
+            return false;
+        }
+    }
 }

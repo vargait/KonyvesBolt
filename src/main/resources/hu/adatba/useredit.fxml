@@ -5,8 +5,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.SecondaryController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.UserEditController">
    <children>
       <Text layoutX="206.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Felhasználónév" />
       <Text layoutX="214.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profiladatok">
@@ -15,15 +17,14 @@
          </font>
       </Text>
       <Text layoutX="206.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail" />
-      <Text layoutX="206.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telefonszám" />
       <Text layoutX="205.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelszó" />
       <Text layoutX="205.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelszó mégegyszer" />
       <TextField fx:id="edituserTF" layoutX="207.0" layoutY="103.0" prefHeight="25.0" prefWidth="159.0" />
       <TextField fx:id="editemailTF" layoutX="206.0" layoutY="153.0" prefHeight="25.0" prefWidth="159.0" />
-      <TextField fx:id="editphoneTF" layoutX="204.0" layoutY="210.0" prefHeight="25.0" prefWidth="159.0" />
-      <TextField fx:id="editpwTF" layoutX="203.0" layoutY="262.0" prefHeight="25.0" prefWidth="159.0" />
-      <TextField fx:id="editpwagainTF" layoutX="201.0" layoutY="316.0" prefHeight="25.0" prefWidth="159.0" />
+      <PasswordField fx:id="editpwPF" layoutX="203.0" layoutY="262.0" prefHeight="25.0" prefWidth="159.0" />
+      <PasswordField fx:id="editpwagainPF" layoutX="201.0" layoutY="316.0" prefHeight="25.0" prefWidth="159.0" />
       <Button fx:id="saveBTN" layoutX="203.0" layoutY="354.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Mentés" />
-      <Button fx:id="editcancelBTN" layoutX="290.0" layoutY="355.0" mnemonicParsing="false" onAction="#switchToPrimary" prefHeight="25.0" prefWidth="56.0" text="Mégse" />
+      <Button fx:id="editcancelBTN" layoutX="290.0" layoutY="355.0" mnemonicParsing="false" onAction="#switchToListBooks" prefHeight="25.0" prefWidth="56.0" text="Vissza" />
+      <Label fx:id="messageLabel" layoutX="201.0" layoutY="380.0" textFill="red"/>
    </children>
 </AnchorPane>

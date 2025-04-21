@@ -2,6 +2,7 @@ package hu.adatba.Service;
 
 import hu.adatba.DAO.UserDAO;
 import hu.adatba.Model.User;
+import hu.adatba.Session;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -33,23 +34,31 @@ public class UserService {
     }
 
     // Bejelentkezés
-    public boolean loginUser(String username, String password) {
+    public User loginUser(String username, String password) {
         User user = userDAO.findUserByUsername(username);
 
         // Létező felhasználó check
         if (user == null) {
             logger.log(Level.INFO, "Nincs ilyen felhasznalo");
-            return false;
+            return null;
         }
 
         // Jelszó check
         if (verifyPassword(password, user.getPassword())) {
             logger.log(Level.INFO, "Egyeznek a jelszavak");
-            return true;
+            return userDAO.findUserByUsername(username);
         } else {
             logger.log(Level.INFO, "Nem egyeznek a jelszavak");
-            return false;
+            return null;
         }
+    }
+
+    // Felhasználó módosítása
+    public boolean updateUser(User user){
+        user.setPassword(hashPassword(user.getPassword()));
+        User sessUser = Session.getUser();
+        sessUser.setPassword(user.getPassword());
+        return userDAO.update(user);
     }
 
     // Jelszó titkosítása
