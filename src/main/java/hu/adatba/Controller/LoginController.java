@@ -1,7 +1,11 @@
 package hu.adatba.Controller;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import hu.adatba.App;
 import hu.adatba.Model.User;
@@ -28,9 +32,13 @@ public class LoginController {
     private Button registerBTN;
 
     @FXML
+    private Button guestloginBTN;
+
+    @FXML
     private Label messageLabel;
 
     private final UserService userService = new UserService();
+    private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 
     public LoginController() throws SQLException {
     }
@@ -52,6 +60,13 @@ public class LoginController {
                 throw new RuntimeException(ex);
             }
         });
+        guestloginBTN.setOnAction(e -> {
+            try {
+                handleGuestLogin();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
     private void handleLogin() throws IOException {
@@ -65,6 +80,20 @@ public class LoginController {
             App.setRoot("list_books");
         } else {
             messageLabel.setText("Helytelen adatok!");
+        }
+    }
+
+    private void handleGuestLogin() throws IOException{
+        try {
+            InetAddress ip = InetAddress.getLocalHost();
+            String ipAddress = ip.getHostAddress();
+            System.out.println(ipAddress);
+            User user = userService.loginAsGuest(ipAddress);
+            Session.setUser(user);
+            messageLabel.setText("Sikeres bejelentkezés!");
+            App.setRoot("list_books");
+        } catch (UnknownHostException e) {
+            logger.log(Level.SEVERE, "Nem sikerult lekerni az ip cimet");
         }
     }
 

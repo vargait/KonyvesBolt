@@ -7,17 +7,25 @@ public class User {
     private String Email;
     private String Password;
     private boolean VIP;
-    private String PaymentMethod;
+    private String FullName;
+    private String PostalAddress;
+    private String CreditNumber;
     private String Role;
+    private String ipAddress;
 
     // Konstruktor
-    public User(String Username, String Email, String Password, int VIP, String PaymentMethod, String Role) {
+    public User(String Username, String Email, String Password, int VIP, String FullName, String PostalAddress, String CreditNumber) {
         this.Username = Username;
         this.Email = Email;
         this.Password = Password;
         this.VIP = VIP == 1;
-        this.PaymentMethod = PaymentMethod;
-        this.Role = Role;
+        this.FullName = FullName;
+        this.PostalAddress = PostalAddress;
+        this.CreditNumber = CreditNumber;
+    }
+
+    public User(String ipAddress){
+        this.ipAddress = ipAddress;
     }
 
     // Getter - Setter
@@ -61,12 +69,28 @@ public class User {
         this.VIP = VIP;
     }
 
-    public String getPaymentMethod() {
-        return PaymentMethod;
+    public String getFullName() {
+        return FullName;
     }
 
-    public void setPaymentMethod(String PaymentMethod) {
-        this.PaymentMethod = PaymentMethod;
+    public void setFullName(String fullName) {
+        FullName = fullName;
+    }
+
+    public String getPostalAddress() {
+        return PostalAddress;
+    }
+
+    public void setPostalAddress(String postalAddress) {
+        PostalAddress = postalAddress;
+    }
+
+    public String getCreditNumber() {
+        return CreditNumber;
+    }
+
+    public void setCreditNumber(String creditNumber) {
+        CreditNumber = creditNumber;
     }
 
     public String getRole() {

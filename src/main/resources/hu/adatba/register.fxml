@@ -7,28 +7,31 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="555.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.RegisterController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="555.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.RegisterController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text layoutX="202.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Felhasználónév" />
-      <Text layoutX="212.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Regisztráció">
+      <Text layoutX="185.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Regisztráció">
          <font>
             <Font size="27.0" />
          </font>
       </Text>
-      <Text layoutX="202.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail" />
-      <Text layoutX="203.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelszó" />
-      <Text layoutX="204.0" layoutY="299.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelszó mégegyszer" />
-      <TextField fx:id="reguserTF" layoutX="204.0" layoutY="116.0" prefHeight="25.0" prefWidth="159.0" />
-      <TextField fx:id="regemailTF" layoutX="204.0" layoutY="165.0" prefHeight="25.0" prefWidth="159.0" />
-      <PasswordField fx:id="regpwPF" layoutX="202.0" layoutY="255.0" prefHeight="25.0" prefWidth="159.0" />
-      <PasswordField fx:id="regpwagainPF" layoutX="204.0" layoutY="310.0" prefHeight="25.0" prefWidth="159.0" />
-      <RadioButton fx:id="regcreditRadio" text="Kártya" layoutX="201.0" layoutY="351.0" />
-      <RadioButton fx:id="regcashRadio" text="Készpénz" layoutX="301.0" layoutY="351.0" />
-      <Button fx:id="registerBTN" layoutX="201.0" layoutY="380.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="OK" />
-      <Button fx:id="loginBTN" layoutX="311.0" layoutY="380.0" mnemonicParsing="false" onAction="#switchToLogin" prefHeight="25.0" prefWidth="56.0" text="Vissza" />
-      <Label fx:id="messageLabel" layoutX="204.0" layoutY="420.0" textFill="red"/>
+      <Text layoutX="180.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Felhasználónév" />
+      <Text layoutX="180.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Teljes név" />
+      <Text layoutX="180.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail" />
+      <Text layoutX="180.0" layoutY="255.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Számlázási cím" />
+      <Text layoutX="180.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bankkártya szám" />
+      <Text layoutX="180.0" layoutY="355.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelszó" />
+      <Text layoutX="180.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jelszó mégegyszer" />
+      <TextField fx:id="reguserTF" layoutX="180.0" layoutY="115.0" prefHeight="25.0" prefWidth="159.0" />
+      <TextField fx:id="regnameTF" layoutX="180.0" layoutY="165.0" prefHeight="25.0" prefWidth="159.0" />
+      <TextField fx:id="regemailTF" layoutX="180.0" layoutY="215.0" prefHeight="25.0" prefWidth="159.0" />
+      <TextField fx:id="regpostaladdressTF" layoutX="180.0" layoutY="265.0" prefHeight="25.0" prefWidth="159.0" />
+      <TextField fx:id="regcreditnumberTF" layoutX="180.0" layoutY="315.0" prefHeight="25.0" prefWidth="159.0" />
+      <PasswordField fx:id="regpwPF" layoutX="180.0" layoutY="365.0" prefHeight="25.0" prefWidth="159.0" />
+      <PasswordField fx:id="regpwagainPF" layoutX="180.0" layoutY="415.0" prefHeight="25.0" prefWidth="159.0" />
+      <Button fx:id="registerBTN" layoutX="180.0" layoutY="465.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="OK" />
+      <Button fx:id="loginBTN" layoutX="280.0" layoutY="465.0" mnemonicParsing="false" onAction="#switchToLogin" prefHeight="25.0" prefWidth="56.0" text="Vissza" />
+      <Label fx:id="messageLabel" layoutX="185.0" layoutY="515.0" textFill="red"/>
    </children>
 </AnchorPane>

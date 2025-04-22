@@ -14,7 +14,16 @@ public class RegisterController {
     private TextField reguserTF;
 
     @FXML
+    private TextField regnameTF;
+
+    @FXML
     private TextField regemailTF;
+
+    @FXML
+    private TextField regpostaladdressTF;
+
+    @FXML
+    private TextField regcreditnumberTF;
 
     @FXML
     private PasswordField regpwPF;
@@ -27,14 +36,6 @@ public class RegisterController {
 
     @FXML
     private Button loginBTN;
-
-    @FXML
-    private RadioButton regcreditRadio;
-
-    @FXML
-    private RadioButton regcashRadio;
-
-    private ToggleGroup paymentMethodGroup;
 
     @FXML
     private Label messageLabel;
@@ -62,30 +63,18 @@ public class RegisterController {
                 throw new RuntimeException(ex);
             }
         });
-
-        paymentMethodGroup = new ToggleGroup();
-
-        regcreditRadio.setToggleGroup(paymentMethodGroup);
-        regcashRadio.setToggleGroup(paymentMethodGroup);
     }
 
     private void handleRegister() throws IOException {
         String username = reguserTF.getText().trim();
+        String fullName = regnameTF.getText().trim();
         String email = regemailTF.getText().trim();
+        String postalAddress = regpostaladdressTF.getText().trim();
+        String creditNumber = regcreditnumberTF.getText().trim();
         String password = regpwPF.getText().trim();
         String passwordConfirm = regpwagainPF.getText().trim();
-        String paymentMethod;
-        RadioButton selected = (RadioButton) paymentMethodGroup.getSelectedToggle();
 
-        if(selected != null){
-            paymentMethod = selected.getText();
-        }
-        else{
-            messageLabel.setText("Nincs fizetési mód kiválasztva!");
-            return;
-        }
-
-        if (username.isEmpty() || password.isEmpty() || email.isEmpty() || paymentMethod.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty() || email.isEmpty() || fullName.isEmpty() || postalAddress.isEmpty() || creditNumber.isEmpty()) {
             messageLabel.setText("Minden mezőt ki kell tölteni!");
             return;
         }
@@ -94,7 +83,7 @@ public class RegisterController {
             return;
         }
 
-        if (userService.registerUser(username, email, password, paymentMethod)) {
+        if (userService.registerUser(username, email, password, fullName, postalAddress, creditNumber)) {
             messageLabel.setText("Sikeres regisztráció!");
         } else {
             messageLabel.setText("Sikertelen regisztráció!");

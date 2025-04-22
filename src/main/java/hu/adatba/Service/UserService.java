@@ -24,8 +24,8 @@ public class UserService {
 
 
     // Regisztrálás
-    public boolean registerUser(String username, String email, String password, String paymentMethod) {
-        User user = new User(username, email, hashPassword(password), 0, paymentMethod, "felhasznalo");
+    public boolean registerUser(String username, String email, String password, String fullName, String postalAddress, String creditNumber) {
+        User user = new User(username, email, hashPassword(password), 0, fullName, postalAddress, creditNumber);
         if(userDAO.findUserByUsername(username) == null) {
             return userDAO.insertUser(user);
         }
@@ -51,6 +51,13 @@ public class UserService {
             logger.log(Level.INFO, "Nem egyeznek a jelszavak");
             return null;
         }
+    }
+
+    // Bejelentkezés látogatóként
+    public User loginAsGuest(String ipAddress){
+        User user = new User(ipAddress);
+        user.setRole("latogato");
+        return user;
     }
 
     // Felhasználó módosítása
@@ -91,7 +98,8 @@ public class UserService {
             // Eltárolt jelszó szétszedése - Formátum: "Salt:SHA-512"
             String[] parts = storedPassword.split(":");
             if (parts.length != 2) {
-                throw new IllegalArgumentException("Nem jol titkositott jelszot tarolunk");
+                logger.log(Level.INFO, "Nem jo a titkositas");
+                return false;
             }
 
             // Salt dekódolása

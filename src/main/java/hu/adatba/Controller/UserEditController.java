@@ -19,7 +19,16 @@ public class UserEditController {
     private TextField edituserTF;
 
     @FXML
+    private TextField editnameTF;
+
+    @FXML
     private TextField editemailTF;
+
+    @FXML
+    private TextField editpostaladdressTF;
+
+    @FXML
+    private TextField editcreditnumberTF;
 
     @FXML
     private PasswordField editpwPF;
@@ -47,6 +56,9 @@ public class UserEditController {
         User user = Session.getUser();
         if (user != null) {
             edituserTF.setText(user.getUsername());
+            editnameTF.setText(user.getFullName());
+            editpostaladdressTF.setText(user.getPostalAddress());
+            editcreditnumberTF.setText(user.getCreditNumber());
             editemailTF.setText(user.getEmail());
         }
 
@@ -68,11 +80,14 @@ public class UserEditController {
 
     private void handleSave() throws IOException {
         String username = edituserTF.getText().trim();
+        String fullname = editnameTF.getText().trim();
         String email = editemailTF.getText().trim();
+        String postalAddress = editpostaladdressTF.getText().trim();
+        String creditNumber = editcreditnumberTF.getText().trim();
         String password = editpwPF.getText().trim();
         String passwordConfirm = editpwagainPF.getText().trim();
 
-        if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty() || email.isEmpty() || fullname.isEmpty() || postalAddress.isEmpty() || creditNumber.isEmpty()) {
             messageLabel.setText("Minden mezőt ki kell tölteni!");
             return;
         }
@@ -85,6 +100,9 @@ public class UserEditController {
         if(user != null){
             user.setUsername(username);
             user.setEmail(email);
+            user.setFullName(fullname);
+            user.setPostalAddress(postalAddress);
+            user.setCreditNumber(creditNumber);
             user.setPassword(password);
 
             if (userService.updateUser(user)) {

@@ -11,9 +11,27 @@
             fx:controller="hu.adatba.Controller.ListBooksController"
             prefHeight="400.0" prefWidth="600.0">
 
-    <Button fx:id="editprofileBTN" layoutX="201.0" layoutY="150.0" mnemonicParsing="false" onAction="#switchToEditProfile" prefHeight="25.0" prefWidth="150.0" text="Profil adatok" />
-    <Button fx:id="addbooksBTN" layoutX="201.0" layoutY="200.0" mnemonicParsing="false" onAction="#switchToAddBooks" prefHeight="25.0" prefWidth="150.0" text="Könyvek felvitele" visible="false" />
-    <Button fx:id="logoutBTN" layoutX="201.0" layoutY="230.0" mnemonicParsing="false" onAction="#switchToAddBooks" prefHeight="25.0" prefWidth="150.0" text="Kijelentkezés" />
+    <Button fx:id="editprofileBTN" layoutX="201.0" layoutY="150.0" mnemonicParsing="false"
+            onAction="#switchToEditProfile" prefHeight="25.0" prefWidth="150.0" text="Profil adatok" visible="false"/>
+    <Button fx:id="addbooksBTN" layoutX="201.0" layoutY="200.0" mnemonicParsing="false" onAction="#switchToAddBooks"
+            prefHeight="25.0" prefWidth="150.0" text="Könyvek felvitele" visible="false"/>
+    <Button fx:id="logoutBTN" layoutX="201.0" layoutY="230.0" mnemonicParsing="false" onAction="#logout"
+            prefHeight="25.0" prefWidth="150.0" text="Kijelentkezés"/>
 
-
+    <TableView fx:id="listbooksTV" layoutY="300.0" prefHeight="400" prefWidth="600" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="300" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+        <columns>
+            <TableColumn fx:id="listtitleTC" text="Cím" />
+            <TableColumn fx:id="listauthorTC" text="Szerző" />
+            <TableColumn fx:id="listpublisherTC" text="Kiadó" />
+            <TableColumn fx:id="listgenreTC" text="Műfaj" />
+            <TableColumn fx:id="listsubgenreTC" text="Alműfaj" />
+            <TableColumn fx:id="listpublishyearTC" text="Kiadási év" />
+            <TableColumn fx:id="listpagesTC" text="Oldalszám" />
+            <TableColumn fx:id="listbindingTC" text="Kötés" />
+            <TableColumn fx:id="listebookTC" text="E-book" />
+            <TableColumn fx:id="listsizeTC" text="Méret" />
+            <TableColumn fx:id="listavailableamountTC" text="Darabszám" />
+            <TableColumn fx:id="listpriceTC" text="Ár" />
+        </columns>
+    </TableView>
 </AnchorPane>
