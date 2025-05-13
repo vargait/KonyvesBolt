@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="hu.adatba.Controller.EditBookController"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <Text layoutX="214.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Könyv felvitele">
+            <font>
+                <Font size="27.0" />
+            </font>
+        </Text>
+        <Text layoutX="200.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cím" />
+        <Text layoutX="200.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Szerző" />
+        <Text layoutX="200.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kiadó" />
+        <Text layoutX="200.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Méret" />
+        <Text layoutX="200.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ár" />
+        <Text layoutX="200.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kötés" />
+        <Text layoutX="200.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kiadás éve" />
+        <Text layoutX="200.0" layoutY="282.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Oldalszám" />
+        <Text layoutX="200.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ekönyv" />
+        <Text layoutX="200.0" layoutY="345.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Műfaj" />
+        <Text layoutX="200.0" layoutY="375.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Alműfaj" />
+        <Text layoutX="200.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Darabszám" />
+        <TextField fx:id="editbooktitleTF" layoutX="265.0" layoutY="46.0" />
+        <TextField fx:id="editbookauthorTF" layoutX="265.0" layoutY="75.0" />
+        <TextField fx:id="editbookpublisherTF" layoutX="265.0" layoutY="105.0" />
+        <TextField fx:id="editbookbindingTF" layoutX="265.0" layoutY="198.0" />
+        <Spinner fx:id="editbookyearSP" layoutX="265.0" layoutY="230.0" />
+        <TextField fx:id="editbookpagesTF" layoutX="265.0" layoutY="266.0" />
+        <Spinner fx:id="editbooksizeSP" layoutX="265.0" layoutY="136.0" />
+        <TextField fx:id="editbookpriceTF" layoutX="265.0" layoutY="167.0" />
+        <Spinner fx:id="editbookebookSP" layoutX="265.0" layoutY="298.0" />
+        <Spinner fx:id="editbookgenreSP" layoutX="265.0" layoutY="328.0" />
+        <Spinner fx:id="editbooksubgenreSP" layoutX="265.0" layoutY="358.0" />
+        <TextField fx:id="editbookavailableamountTF" layoutX="265.0" layoutY="388.0" />
+        <Button fx:id="editbookpostBTN" layoutX="239.0" layoutY="430.0" mnemonicParsing="false" text="Módosítás" />
+        <Button fx:id="editbookcancelBTN" layoutX="340.0" layoutY="430.0" mnemonicParsing="false" text="Vissza" />
+        <Label fx:id="messageLabel" layoutX="265.0" layoutY="470.0" textFill="red"/>
+    </children>
+
+</AnchorPane>

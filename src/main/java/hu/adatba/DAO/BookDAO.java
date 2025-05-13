@@ -144,6 +144,7 @@ public class BookDAO {
             stmt.setString(10, book.getBinding());
             stmt.setInt(11, book.getPrice());
             stmt.setString(12, book.getSize());
+            stmt.setInt(13, book.getBookID());
 
             int rows = stmt.executeUpdate();
             return rows > 0;

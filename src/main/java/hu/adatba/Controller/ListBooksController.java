@@ -11,10 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TableCell;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ListBooksController {
     // Adattagok
@@ -67,8 +71,11 @@ public class ListBooksController {
     private Button logoutBTN;
 
     private final BookService bookService = new BookService();
+    private final User user;
+    private static final Logger logger = Logger.getLogger(ListBooksController.class.getName());
 
     public ListBooksController() throws SQLException {
+        user = Session.getUser();
     }
 
     // Metódusok
@@ -86,11 +93,11 @@ public class ListBooksController {
         listsizeTC.setCellValueFactory(new PropertyValueFactory<>("size"));
         listavailableamountTC.setCellValueFactory(new PropertyValueFactory<>("availableAmount"));
         listpriceTC.setCellValueFactory(new PropertyValueFactory<>("price"));
+        addActionColumn();
 
         List<Book> books = bookService.getAllBooks();
         listbooksTV.setItems(FXCollections.observableArrayList(books));
 
-        User user = Session.getUser();
         if (user != null) {
             if(user.getRole().equals("admin")) {
                 addbooksBTN.setVisible(true);
@@ -107,6 +114,90 @@ public class ListBooksController {
                 throw new RuntimeException(ex);
             }
         });
+    }
+
+    private void addActionColumn() {
+        TableColumn<Book, Void> listActionTC = new TableColumn<>("Művelet");
+        if(!user.getRole().equals("admin")){
+            listActionTC.setCellFactory(param -> new TableCell<>() {
+
+                private final Button orderBtn = new Button("Rendelés");
+                {
+                    orderBtn.setOnAction(event -> {
+                        Book book = getTableView().getItems().get(getIndex());
+                        try {
+                            switchToOrder(book);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setGraphic(empty ? null : orderBtn);
+                }
+            });
+        }
+        else{
+            listActionTC.setCellFactory(param -> new TableCell<>() {
+
+                private final Button editBtn = new Button("Szerkesztés");
+                /*
+                private final Button deleteBtn = new Button("Törlés");
+                private final HBox buttonBox = new HBox(5, editBtn, deleteBtn);
+                */
+                {
+                    editBtn.setOnAction(event -> {
+                        Book book = getTableView().getItems().get(getIndex());
+                        try {
+                            switchToEdit(book);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }
+
+                /*
+                {
+                    deleteBtn.setOnAction(event -> {
+                        Book book = getTableView().getItems().get(getIndex());
+                        try {
+                            if(bookService.deleteBook(book.getBookID())){
+                                logger.log(Level.INFO, "Könyv sikeresen törölve");
+                                getTableView().getItems().remove(book);
+                            }
+                            else{
+                                logger.log(Level.INFO, "Könyv törlése sikertelen");
+                            }
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+
+                }
+                */
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setGraphic(empty ? null : editBtn);
+                }
+            });
+        }
+
+        listbooksTV.getColumns().add(listActionTC);
+    }
+
+    private void switchToOrder(Book book) throws IOException {
+        Session.setSelectedBook(book);
+        App.setRoot("order");
+    }
+
+    private void switchToEdit(Book book) throws IOException {
+        Session.setSelectedBook(book);
+        App.setRoot("edit_book");
     }
 
     @FXML

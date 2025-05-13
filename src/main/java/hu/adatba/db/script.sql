@@ -463,6 +463,216 @@ end if;
 end;
 /
 
+-- Triggerek segédcsomagja: Törzsvásárló frissítéshez
+CREATE OR REPLACE PACKAGE torzsvasarlo_pkg IS
+    TYPE userid_tab IS TABLE OF NUMBER INDEX BY PLS_INTEGER;
+    userids userid_tab;
+    PROCEDURE reset;
+END;
+/
+CREATE OR REPLACE PACKAGE BODY torzsvasarlo_pkg IS
+    PROCEDURE reset IS
+    BEGIN
+        userids.DELETE;
+    END;
+END;
+/
+
+-- Trigger: USERID-k gyűjtése új rendelések után
+CREATE OR REPLACE TRIGGER torzsvasarlo_collect
+    AFTER INSERT ON RENDELES_F
+    FOR EACH ROW
+BEGIN
+    torzsvasarlo_pkg.userids(torzsvasarlo_pkg.userids.COUNT + 1) := :NEW.USERID;
+END;
+/
+
+-- Trigger: Törzsvásárló státusz frissítése a RENDELES_F alapján
+CREATE OR REPLACE TRIGGER torzsvasarlo_update
+    AFTER INSERT ON RENDELES_F
+DECLARE
+    v_userid NUMBER;
+    v_count  NUMBER;
+BEGIN
+    IF torzsvasarlo_pkg.userids.COUNT > 0 THEN
+        FOR i IN torzsvasarlo_pkg.userids.FIRST .. torzsvasarlo_pkg.userids.LAST LOOP
+                v_userid := torzsvasarlo_pkg.userids(i);
+
+                SELECT COUNT(*) INTO v_count
+                FROM RENDELES_F
+                WHERE USERID = v_userid;
+
+                IF v_count >= 3 THEN
+                    UPDATE FELHASZNALO
+                    SET TORZSVASARLO = 1
+                    WHERE USERID = v_userid;
+                END IF;
+            END LOOP;
+
+        torzsvasarlo_pkg.reset;
+    END IF;
+END;
+/
+
+INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID) VALUES (2001, 1, 1);
+INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID) VALUES (2002, 1, 2);
+INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID) VALUES (2003, 1, 3);
+/
+
+-- Trigger létrehozása, amely akkor fut le, ha új rekord kerül a RENDELES_F táblába
+CREATE OR REPLACE TRIGGER KONYVDARAB_CSOKKENTES
+    AFTER INSERT ON RENDELES_F           -- Csak beszúrás (INSERT) esetén aktiválódik
+    FOR EACH ROW                         -- Minden új sorra külön lefut
+
+BEGIN
+    -- A kapcsolódó könyv darabszámát csökkenti eggyel
+    UPDATE KONYV
+    SET DARAB = DARAB - 1
+    WHERE KONYVID = :NEW.KONYVID;     -- A frissen beszúrt rendelés könyvazonosítója alapján
+
+END;
+/
+
+-- Felhasználó 1 rendel két könyvet (ID: 2 és 3), hogy csökkenjen a darabszám
+
+-- Első rendelés – KÖNYVID: 2
+INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID)
+VALUES (3001, 1, 2);
+
+-- Második rendelés – KÖNYVID: 3
+INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID)
+VALUES (3002, 1, 3);
+
+
+-- Trigger létrehozása a SZAMLA_F automatikus feltöltésére rendelés esetén
+CREATE OR REPLACE TRIGGER SZAMLA_LETREHOZAS
+    AFTER INSERT ON RENDELES_F
+    FOR EACH ROW
+DECLARE
+    konyv_ar NUMBER;
+BEGIN
+    -- Lekérjük a könyv árát a rendeléshez tartozó könyv alapján
+    SELECT AR INTO konyv_ar
+    FROM KONYV
+    WHERE KONYVID = :NEW.KONYVID;
+
+    -- Beszúrjuk a számlát a SZAMLA_F táblába
+    INSERT INTO SZAMLA_F (SZAMLAFID, DATUM_EV, AR, RENDELESFID)
+    VALUES (:NEW.RENDELESFID, EXTRACT(YEAR FROM SYSDATE), konyv_ar, :NEW.RENDELESFID);
+END;
+/
+
+-- Létrehozunk egy triggert, ami a RENDELES_F tábla minden új beszúrásánál (INSERT)
+-- automatikusan beállítja az AKCIO_E mezőt attól függően, hogy a könyv ára 2000 Ft alatt van-e.
+
+CREATE OR REPLACE TRIGGER AKCIOS_MEZO_TRIGGER
+    BEFORE INSERT ON RENDELES_F          -- Mielőtt egy új sor beszúrásra kerülne a RENDELES_F táblába
+    FOR EACH ROW                         -- Minden egyes új sorra külön lefut
+DECLARE
+    v_ar NUMBER;                       -- Változó a kiválasztott könyv árának eltárolására
+BEGIN
+    -- Lekérdezzük a könyv árát a KONYV táblából
+    SELECT AR INTO v_ar
+    FROM KONYV
+    WHERE KONYVID = :NEW.KONYVID;
+
+    -- Ha a könyv ára kisebb, mint 2000, akkor akciós (1), különben nem akciós (0)
+    IF v_ar < 2000 THEN
+        :NEW.AKCIO_E := 1;
+    ELSE
+        :NEW.AKCIO_E := 0;
+    END IF;
+END;
+/
+
+-- Ez a könyv ára < 2000, ezért akciós lesz (AKCIO_E = 1)
+INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID)
+VALUES (6001, 1, 3);
+
+-- Ez a könyv ára >= 2000, ezért nem lesz akciós (AKCIO_E = 0)
+INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID)
+VALUES (6002, 1, 0);
+
+
+
+-- TRIGGER: Automatikusan frissíti a SZAMLA_F tábla AR mezőjét a RENDELES_F-ben lévő könyv árának megfelelően
+
+CREATE OR REPLACE TRIGGER SZAMLAF_AR_FRISSITES
+    BEFORE INSERT ON SZAMLA_F
+    FOR EACH ROW
+BEGIN
+    -- Beállítja a számla árát a rendeléshez tartozó könyv árának megfelelően
+    SELECT K.AR INTO :NEW.AR
+    FROM KONYV K
+             JOIN RENDELES_F R ON R.KONYVID = K.KONYVID
+    WHERE R.RENDELESFID = :NEW.RENDELESFID;
+END;
+/
+
+-- Teszt beszúrás a SZAMLA_F táblába, ahol az ár automatikusan beállításra kerül a kiválasztott könyv árának megfelelően
+INSERT INTO SZAMLA_F (SZAMLAFID, DATUM_EV, RENDELESFID)
+VALUES (9001, 2025, 1);  -- Használj olyan RENDELESFID-et, ami már létezik!
+
+
+-- Trigger, amely beállítja a SZAMLA_L.AR értékét a kapcsolódó könyv árának megfelelően
+CREATE OR REPLACE TRIGGER SZAMLA_L_AR_BEALLITAS
+    BEFORE INSERT ON SZAMLA_L
+    FOR EACH ROW
+DECLARE
+    v_ar KONYV.AR%TYPE;
+BEGIN
+    -- Könyv ár lekérdezése a RENDELES_L táblán keresztül
+    SELECT k.AR INTO v_ar
+    FROM KONYV k
+             JOIN RENDELES_L rl ON rl.KONYVID = k.KONYVID
+    WHERE rl.RENDELESLID = :NEW.RENDELESLID;
+
+    -- Beállítjuk a számlára az árat
+    :NEW.AR := v_ar;
+END;
+/
+
+-- Új számla beszúrása létező RENDELESLID-del
+INSERT INTO SZAMLA_L (SZAMLALID, DATUM_EV, RENDELESLID)
+VALUES (9003, 2025, 0);
+
+-- Csomag fejléc, ami eltárolja azoknak a könyveknek az ID-jét,
+-- amelyeket törölni kell, mert elfogytak (DARAB = 0)
+CREATE OR REPLACE PACKAGE KONYV_TORLES_PKG IS
+    TYPE ID_LIST IS TABLE OF KONYV.KONYVID%TYPE INDEX BY PLS_INTEGER;
+    KONYV_IDS ID_LIST;    -- Ide kerülnek az ID-k
+    INDEXER NUMBER := 0;  -- Indexelő változó
+END KONYV_TORLES_PKG;
+/
+
+-- Trigger: frissítés előtt fut soronként
+-- Ha egy könyv darabszáma 0 lesz, eltároljuk az ID-jét a csomagban
+CREATE OR REPLACE TRIGGER KONYV_TORLES_COLLECT
+    BEFORE UPDATE ON KONYV
+    FOR EACH ROW
+BEGIN
+    IF :NEW.DARAB = 0 THEN
+        KONYV_TORLES_PKG.INDEXER := KONYV_TORLES_PKG.INDEXER + 1;
+        KONYV_TORLES_PKG.KONYV_IDS(KONYV_TORLES_PKG.INDEXER) := :NEW.KONYVID;
+    END IF;
+END;
+/
+
+-- Trigger: frissítés után fut egyszer a teljes UPDATE-re
+-- Végigmegy a csomagban eltárolt ID-kon, és törli az adott könyveket
+CREATE OR REPLACE TRIGGER KONYV_TORLES_DELETE
+    AFTER UPDATE ON KONYV
+BEGIN
+    FOR i IN 1 .. KONYV_TORLES_PKG.INDEXER LOOP
+            DELETE FROM KONYV WHERE KONYVID = KONYV_TORLES_PKG.KONYV_IDS(i);
+        END LOOP;
+    -- Csomag újrainicializálása
+    KONYV_TORLES_PKG.INDEXER := 0;
+END;
+/
+
+
+
 create or replace trigger SZAMLA_L_TRG
 before insert on SZAMLA_L
 for each row
