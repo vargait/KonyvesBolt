@@ -151,10 +151,10 @@ public class ListBooksController {
             listActionTC.setCellFactory(param -> new TableCell<>() {
 
                 private final Button editBtn = new Button("Szerkesztés");
-                /*
+
                 private final Button deleteBtn = new Button("Törlés");
                 private final HBox buttonBox = new HBox(5, editBtn, deleteBtn);
-                */
+
                 {
                     editBtn.setOnAction(event -> {
                         Book book = getTableView().getItems().get(getIndex());
@@ -166,7 +166,7 @@ public class ListBooksController {
                     });
                 }
 
-                /*
+
                 {
                     deleteBtn.setOnAction(event -> {
                         Book book = getTableView().getItems().get(getIndex());
@@ -184,12 +184,12 @@ public class ListBooksController {
                     });
 
                 }
-                */
+
 
                 @Override
                 protected void updateItem(Void item, boolean empty) {
                     super.updateItem(item, empty);
-                    setGraphic(empty ? null : editBtn);
+                    setGraphic(empty ? null : buttonBox);
                 }
             });
         }
