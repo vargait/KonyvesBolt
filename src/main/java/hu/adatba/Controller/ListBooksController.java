@@ -70,6 +70,8 @@ public class ListBooksController {
     @FXML
     private Button logoutBTN;
 
+    @FXML Button addgenresBTN;
+
     private final BookService bookService = new BookService();
     private final User user;
     private static final Logger logger = Logger.getLogger(ListBooksController.class.getName());
@@ -101,9 +103,11 @@ public class ListBooksController {
         if (user != null) {
             if(user.getRole().equals("admin")) {
                 addbooksBTN.setVisible(true);
+                addgenresBTN.setVisible(true);
             }
             if(!user.getRole().equals("latogato")) {
                 editprofileBTN.setVisible(true);
+
             }
         }
 
@@ -114,6 +118,9 @@ public class ListBooksController {
                 throw new RuntimeException(ex);
             }
         });
+
+
+
     }
 
     private void addActionColumn() {
@@ -214,5 +221,9 @@ public class ListBooksController {
     private void logout() throws IOException {
         Session.clear();
         App.setRoot("login");
+    }
+    @FXML
+    private void switchToAddGenres() throws IOException{
+        App.setRoot("add_genres");
     }
 }
