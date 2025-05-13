@@ -46,6 +46,16 @@ public class BookService {
         return bookDAO.getAllBooks();
     }
 
+    // Könyvek lekérdezése kulcsszó alapján
+    public List<Book> getBooksByKeyword(String keyword) {
+        return bookDAO.getBooksByKeyword(keyword);
+    }
+
+    // Bestsellerek lekérdezése
+    public List<Book> getBestsellers(){
+        return bookDAO.getBestsellers();
+    }
+
     // Műfaj lekérdezése
     public List<String> getGenres(){
         return bookDAO.getGenresFromDB();

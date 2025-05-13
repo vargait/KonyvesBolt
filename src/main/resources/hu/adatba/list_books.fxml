@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.ListBooksController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.ListBooksController">
 
-    <Button fx:id="addgenresBTN" layoutX="201.0" layoutY="115.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Műfajok felvitele" visible="false" onAction="#switchToAddGenres"/>
+    <Button fx:id="addgenresBTN" layoutX="201.0" layoutY="115.0" mnemonicParsing="false" onAction="#switchToAddGenres" prefHeight="25.0" prefWidth="150.0" text="Műfajok felvitele" visible="false" />
     <Button fx:id="editprofileBTN" layoutX="201.0" layoutY="150.0" mnemonicParsing="false" onAction="#switchToEditProfile" prefHeight="25.0" prefWidth="150.0" text="Profil adatok" visible="false" />
     <Button fx:id="addbooksBTN" layoutX="201.0" layoutY="200.0" mnemonicParsing="false" onAction="#switchToAddBooks" prefHeight="25.0" prefWidth="150.0" text="Könyvek felvitele" visible="false" />
     <Button fx:id="logoutBTN" layoutX="201.0" layoutY="230.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="150.0" text="Kijelentkezés" />
@@ -28,4 +27,9 @@
             <TableColumn fx:id="listpriceTC" text="Ár" />
         </columns>
     </TableView>
+    <Text fx:id="resultcountT" layoutX="31.0" layoutY="38.0" wrappingWidth="149.0" />
+   <TextField fx:id="searchTF" cache="true" layoutX="30.0" layoutY="42.0" prefHeight="25.0" prefWidth="150.0" promptText="Cím, szerző, műfaj..." />
+   <Button fx:id="searchBTN" layoutX="30.0" layoutY="74.0" mnemonicParsing="false" text="Keresés" />
+   <Button fx:id="bestsellerBTN" layoutX="30.0" layoutY="115.0" mnemonicParsing="false" text="Bestsellerek" />
+   <Button fx:id="statBTN" visible="false" layoutX="30.0" layoutY="163.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Statisztikák" />
 </AnchorPane>

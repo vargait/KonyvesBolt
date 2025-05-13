@@ -7,12 +7,10 @@ import hu.adatba.Service.BookService;
 import hu.adatba.Session;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.TableCell;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -65,12 +63,13 @@ public class ListBooksController {
     private Button editprofileBTN;
 
     @FXML
-    private Button addbooksBTN;
+    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN;
 
     @FXML
-    private Button logoutBTN;
+    private TextField searchTF;
 
-    @FXML Button addgenresBTN;
+    @FXML
+    private Text resultcountT;
 
     private final BookService bookService = new BookService();
     private final User user;
@@ -99,11 +98,13 @@ public class ListBooksController {
 
         List<Book> books = bookService.getAllBooks();
         listbooksTV.setItems(FXCollections.observableArrayList(books));
+        resultcountT.setText(books.size() + " találat");
 
         if (user != null) {
             if(user.getRole().equals("admin")) {
                 addbooksBTN.setVisible(true);
                 addgenresBTN.setVisible(true);
+                statBTN.setVisible(true);
             }
             if(!user.getRole().equals("latogato")) {
                 editprofileBTN.setVisible(true);
@@ -119,10 +120,47 @@ public class ListBooksController {
             }
         });
 
+        statBTN.setOnAction(e -> {
+            try {
+                switchToStats();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
+        searchBTN.setOnAction(e -> {
+            listBooksBySearch();
+        });
 
+        bestsellerBTN.setOnAction(e -> {
+            listBestsellers();
+        });
     }
 
+    // Könyvek keresése kulcsszavak alapján
+    private void listBooksBySearch(){
+        listbooksTV.getItems().clear();
+        String searchStr = searchTF.getText().toLowerCase().trim();
+        List<Book> books;
+        if(!searchStr.isEmpty()) {
+            books = bookService.getBooksByKeyword(searchStr);
+        }
+        else{
+            books = bookService.getAllBooks();
+        }
+        resultcountT.setText(books.size() + " találat");
+        listbooksTV.setItems(FXCollections.observableArrayList(books));
+    }
+
+    // Bestsellerek keresése
+    private void listBestsellers(){
+        listbooksTV.getItems().clear();
+        List<Book> books = bookService.getBestsellers();
+        resultcountT.setText("Top 3 könyv");
+        listbooksTV.setItems(FXCollections.observableArrayList(books));
+    }
+
+    // Gombok hozzáadása a listaelemek végére
     private void addActionColumn() {
         TableColumn<Book, Void> listActionTC = new TableColumn<>("Művelet");
         if(!user.getRole().equals("admin")){
@@ -149,9 +187,7 @@ public class ListBooksController {
         }
         else{
             listActionTC.setCellFactory(param -> new TableCell<>() {
-
                 private final Button editBtn = new Button("Szerkesztés");
-
                 private final Button deleteBtn = new Button("Törlés");
                 private final HBox buttonBox = new HBox(5, editBtn, deleteBtn);
 
@@ -195,6 +231,10 @@ public class ListBooksController {
         }
 
         listbooksTV.getColumns().add(listActionTC);
+    }
+
+    private void switchToStats() throws IOException {
+        App.setRoot("statistics");
     }
 
     private void switchToOrder(Book book) throws IOException {

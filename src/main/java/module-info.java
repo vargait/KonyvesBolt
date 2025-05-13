@@ -3,6 +3,8 @@ module hu.adatba {
     requires javafx.fxml;
     requires java.sql;
     requires java.dotenv;
+    requires com.oracle.database.jdbc;
+    requires java.desktop;
 
     opens hu.adatba to javafx.fxml;
     exports hu.adatba;

@@ -1,7 +1,9 @@
 package hu.adatba.DAO;
 
 import hu.adatba.Model.Book;
+import hu.adatba.Model.QueryResult;
 import hu.adatba.db.DBConnect;
+import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -82,6 +84,26 @@ public class BookDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 books.add(getBook(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return books;
+    }
+
+    // Könyvek lekérdezése DB-ből kulcsszó alapján
+    public List<Book> getBooksByKeyword(String keyword) {
+        List<Book> books = new ArrayList<>();
+        String sql = "SELECT * FROM KONYV WHERE LOWER(CIM) LIKE ? OR LOWER(SZERZO) LIKE ? OR LOWER(MUFAJNEV) LIKE ? OR LOWER(ALMUFAJ) LIKE ? ORDER BY CIM";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + keyword + "%");
+            stmt.setString(2, "%" + keyword + "%");
+            stmt.setString(3, "%" + keyword + "%");
+            stmt.setString(4, "%" + keyword + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    books.add(getBook(rs));
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -197,5 +219,28 @@ public class BookDAO {
             logger.log(Level.SEVERE, "Almufajok lekerdezese sikertelen.", e);
         }
         return subgenres;
+    }
+
+    // Legtöbbször rendelt könyvek (TOP 3) - Összetett lekérdezés
+    public List<Book> getBestsellers(){
+        List<Book> books = new ArrayList<>();
+        String sql = "SELECT k.* " +
+                "FROM KONYV k " +
+                "JOIN ( " +
+                "SELECT KONYVID, COUNT(*) AS RENDELES_SZAM " +
+                "FROM RENDELES_F " +
+                "GROUP BY KONYVID " +
+                "ORDER BY RENDELES_SZAM DESC " +
+                "FETCH FIRST 3 ROWS ONLY " +
+                ") top_books ON k.KONYVID = top_books.KONYVID " +
+                "ORDER BY top_books.RENDELES_SZAM DESC";
+        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
+            while (rs.next()) {
+                books.add(getBook(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return books;
     }
 }
