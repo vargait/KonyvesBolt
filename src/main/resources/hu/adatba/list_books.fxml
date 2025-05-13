@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="hu.adatba.Controller.ListBooksController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.ListBooksController">
 
-    <Button fx:id="editprofileBTN" layoutX="201.0" layoutY="150.0" mnemonicParsing="false"
-            onAction="#switchToEditProfile" prefHeight="25.0" prefWidth="150.0" text="Profil adatok" visible="false"/>
-    <Button fx:id="addbooksBTN" layoutX="201.0" layoutY="200.0" mnemonicParsing="false" onAction="#switchToAddBooks"
-            prefHeight="25.0" prefWidth="150.0" text="Könyvek felvitele" visible="false"/>
-    <Button fx:id="logoutBTN" layoutX="201.0" layoutY="230.0" mnemonicParsing="false" onAction="#logout"
-            prefHeight="25.0" prefWidth="150.0" text="Kijelentkezés"/>
+    <Button fx:id="addgenresBTN" layoutX="201.0" layoutY="115.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Műfajok felvitele" visible="false" onAction="#switchToAddGenres"/>
+    <Button fx:id="editprofileBTN" layoutX="201.0" layoutY="150.0" mnemonicParsing="false" onAction="#switchToEditProfile" prefHeight="25.0" prefWidth="150.0" text="Profil adatok" visible="false" />
+    <Button fx:id="addbooksBTN" layoutX="201.0" layoutY="200.0" mnemonicParsing="false" onAction="#switchToAddBooks" prefHeight="25.0" prefWidth="150.0" text="Könyvek felvitele" visible="false" />
+    <Button fx:id="logoutBTN" layoutX="201.0" layoutY="230.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="150.0" text="Kijelentkezés" />
 
-    <TableView fx:id="listbooksTV" layoutY="300.0" prefHeight="400" prefWidth="600" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="300" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+    <TableView fx:id="listbooksTV" layoutY="300.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="300">
         <columns>
             <TableColumn fx:id="listtitleTC" text="Cím" />
             <TableColumn fx:id="listauthorTC" text="Szerző" />
