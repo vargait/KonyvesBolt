@@ -413,7 +413,7 @@ CREATE SEQUENCE SZAMLA_F_SEQ START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE SZAMLA_L_SEQ START WITH 1 INCREMENT BY 1;
 
 -- Triggerek
-create or replace trigger FELHASZNALO_TRG1
+create or replace trigger FELHASZNALO_ID_TRIGGER
 before insert on FELHASZNALO
 for each row
 begin
@@ -423,7 +423,7 @@ end if;
 end;
 /
 
-create or replace trigger KONYV_TRG
+create or replace trigger KONYV_ID_TRIGGER
 before insert on KONYV
 for each row
 begin
@@ -433,7 +433,7 @@ end if;
 end;
 /
 
-create or replace trigger RENDELES_F_TRG
+create or replace trigger RENDELES_F_ID_TRIGGER
 before insert on RENDELES_F
 for each row
 begin
@@ -443,7 +443,7 @@ end if;
 end;
 /
 
-create or replace trigger RENDELES_L_TRG
+create or replace trigger RENDELES_L_ID_TRIGGER
 before insert on RENDELES_L
 for each row
 begin
@@ -453,13 +453,23 @@ end if;
 end;
 /
 
-create or replace trigger SZAMLA_F_TRG
+create or replace trigger SZAMLA_F_ID_TRIGGER
 before insert on SZAMLA_F
 for each row
 begin
     if inserting and :new.SZAMLAFID is null then
 select SZAMLA_F_SEQ.nextval into :new.SZAMLAFID from dual;
 end if;
+end;
+/
+
+create or replace trigger SZAMLA_L_ID_TRIGGER
+    before insert on SZAMLA_L
+    for each row
+begin
+    if inserting and :new.SZAMLALID is null then
+        select SZAMLA_L_SEQ.nextval into :new.SZAMLALID from dual;
+    end if;
 end;
 /
 
@@ -514,38 +524,32 @@ BEGIN
 END;
 /
 
-INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID) VALUES (2001, 1, 1);
-INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID) VALUES (2002, 1, 2);
-INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID) VALUES (2003, 1, 3);
-/
-
 -- Trigger létrehozása, amely akkor fut le, ha új rekord kerül a RENDELES_F táblába
-CREATE OR REPLACE TRIGGER KONYVDARAB_CSOKKENTES
-    AFTER INSERT ON RENDELES_F           -- Csak beszúrás (INSERT) esetén aktiválódik
-    FOR EACH ROW                         -- Minden új sorra külön lefut
-
+CREATE OR REPLACE TRIGGER KONYVDARAB_CSOKKENTES_F
+    AFTER INSERT ON RENDELES_F          -- Csak beszúrás (INSERT) esetén aktiválódik
+    FOR EACH ROW                        -- Minden új sorra külön lefut
 BEGIN
     -- A kapcsolódó könyv darabszámát csökkenti eggyel
     UPDATE KONYV
     SET DARAB = DARAB - 1
-    WHERE KONYVID = :NEW.KONYVID;     -- A frissen beszúrt rendelés könyvazonosítója alapján
-
+    WHERE KONYVID = :NEW.KONYVID;       -- A frissen beszúrt rendelés könyvazonosítója alapján
 END;
 /
 
--- Felhasználó 1 rendel két könyvet (ID: 2 és 3), hogy csökkenjen a darabszám
-
--- Első rendelés – KÖNYVID: 2
-INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID)
-VALUES (3001, 1, 2);
-
--- Második rendelés – KÖNYVID: 3
-INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID)
-VALUES (3002, 1, 3);
-
+-- Trigger létrehozása, amely akkor fut le, ha új rekord kerül a RENDELES_L táblába
+CREATE OR REPLACE TRIGGER KONYVDARAB_CSOKKENTES_L
+    AFTER INSERT ON RENDELES_L          -- Csak beszúrás (INSERT) esetén aktiválódik
+    FOR EACH ROW                        -- Minden új sorra külön lefut
+BEGIN
+    -- A kapcsolódó könyv darabszámát csökkenti eggyel
+    UPDATE KONYV
+    SET DARAB = DARAB - 1
+    WHERE KONYVID = :NEW.KONYVID;       -- A frissen beszúrt rendelés könyvazonosítója alapján
+END;
+/
 
 -- Trigger létrehozása a SZAMLA_F automatikus feltöltésére rendelés esetén
-CREATE OR REPLACE TRIGGER SZAMLA_LETREHOZAS
+CREATE OR REPLACE TRIGGER SZAMLA_LETREHOZAS_F
     AFTER INSERT ON RENDELES_F
     FOR EACH ROW
 DECLARE
@@ -557,15 +561,33 @@ BEGIN
     WHERE KONYVID = :NEW.KONYVID;
 
     -- Beszúrjuk a számlát a SZAMLA_F táblába
-    INSERT INTO SZAMLA_F (SZAMLAFID, DATUM_EV, AR, RENDELESFID)
-    VALUES (:NEW.RENDELESFID, EXTRACT(YEAR FROM SYSDATE), konyv_ar, :NEW.RENDELESFID);
+    INSERT INTO SZAMLA_F (DATUM_EV, AR, RENDELESFID)
+    VALUES (EXTRACT(YEAR FROM SYSDATE), konyv_ar, :NEW.RENDELESFID);
+END;
+/
+
+-- Trigger létrehozása a SZAMLA_L automatikus feltöltésére rendelés esetén
+CREATE OR REPLACE TRIGGER SZAMLA_LETREHOZAS_L
+    AFTER INSERT ON RENDELES_L
+    FOR EACH ROW
+DECLARE
+    konyv_ar NUMBER;
+BEGIN
+    -- Lekérjük a könyv árát a rendeléshez tartozó könyv alapján
+    SELECT AR INTO konyv_ar
+    FROM KONYV
+    WHERE KONYVID = :NEW.KONYVID;
+
+    -- Beszúrjuk a számlát a SZAMLA_L táblába
+    INSERT INTO SZAMLA_L (DATUM_EV, AR, RENDELESLID)
+    VALUES (EXTRACT(YEAR FROM SYSDATE), konyv_ar, :NEW.RENDELESLID);
 END;
 /
 
 -- Létrehozunk egy triggert, ami a RENDELES_F tábla minden új beszúrásánál (INSERT)
 -- automatikusan beállítja az AKCIO_E mezőt attól függően, hogy a könyv ára 2000 Ft alatt van-e.
 
-CREATE OR REPLACE TRIGGER AKCIOS_MEZO_TRIGGER
+CREATE OR REPLACE TRIGGER AKCIOS_MEZO_TRIGGER_F
     BEFORE INSERT ON RENDELES_F          -- Mielőtt egy új sor beszúrásra kerülne a RENDELES_F táblába
     FOR EACH ROW                         -- Minden egyes új sorra külön lefut
 DECLARE
@@ -585,15 +607,28 @@ BEGIN
 END;
 /
 
--- Ez a könyv ára < 2000, ezért akciós lesz (AKCIO_E = 1)
-INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID)
-VALUES (6001, 1, 3);
+-- Létrehozunk egy triggert, ami a RENDELES_L tábla minden új beszúrásánál (INSERT)
+-- automatikusan beállítja az AKCIO_E mezőt attól függően, hogy a könyv ára 2000 Ft alatt van-e.
 
--- Ez a könyv ára >= 2000, ezért nem lesz akciós (AKCIO_E = 0)
-INSERT INTO RENDELES_F (RENDELESFID, USERID, KONYVID)
-VALUES (6002, 1, 0);
+CREATE OR REPLACE TRIGGER AKCIOS_MEZO_TRIGGER_L
+    BEFORE INSERT ON RENDELES_L          -- Mielőtt egy új sor beszúrásra kerülne a RENDELES_L táblába
+    FOR EACH ROW                         -- Minden egyes új sorra külön lefut
+DECLARE
+    v_ar NUMBER;                       -- Változó a kiválasztott könyv árának eltárolására
+BEGIN
+    -- Lekérdezzük a könyv árát a KONYV táblából
+    SELECT AR INTO v_ar
+    FROM KONYV
+    WHERE KONYVID = :NEW.KONYVID;
 
-
+    -- Ha a könyv ára kisebb, mint 2000, akkor akciós (1), különben nem akciós (0)
+    IF v_ar < 2000 THEN
+        :NEW.AKCIO_E := 1;
+    ELSE
+        :NEW.AKCIO_E := 0;
+    END IF;
+END;
+/
 
 -- TRIGGER: Automatikusan frissíti a SZAMLA_F tábla AR mezőjét a RENDELES_F-ben lévő könyv árának megfelelően
 
@@ -608,11 +643,6 @@ BEGIN
     WHERE R.RENDELESFID = :NEW.RENDELESFID;
 END;
 /
-
--- Teszt beszúrás a SZAMLA_F táblába, ahol az ár automatikusan beállításra kerül a kiválasztott könyv árának megfelelően
-INSERT INTO SZAMLA_F (SZAMLAFID, DATUM_EV, RENDELESFID)
-VALUES (9001, 2025, 1);  -- Használj olyan RENDELESFID-et, ami már létezik!
-
 
 -- Trigger, amely beállítja a SZAMLA_L.AR értékét a kapcsolódó könyv árának megfelelően
 CREATE OR REPLACE TRIGGER SZAMLA_L_AR_BEALLITAS
@@ -631,10 +661,6 @@ BEGIN
     :NEW.AR := v_ar;
 END;
 /
-
--- Új számla beszúrása létező RENDELESLID-del
-INSERT INTO SZAMLA_L (SZAMLALID, DATUM_EV, RENDELESLID)
-VALUES (9003, 2025, 0);
 
 -- Csomag fejléc, ami eltárolja azoknak a könyveknek az ID-jét,
 -- amelyeket törölni kell, mert elfogytak (DARAB = 0)
@@ -669,18 +695,6 @@ BEGIN
     -- Csomag újrainicializálása
     KONYV_TORLES_PKG.INDEXER := 0;
 END;
-/
-
-
-
-create or replace trigger SZAMLA_L_TRG
-before insert on SZAMLA_L
-for each row
-begin
-    if inserting and :new.SZAMLALID is null then
-select SZAMLA_L_SEQ.nextval into :new.SZAMLALID from dual;
-end if;
-end;
 /
 
 

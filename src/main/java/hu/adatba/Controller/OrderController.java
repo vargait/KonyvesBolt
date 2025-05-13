@@ -1,27 +1,68 @@
 package hu.adatba.Controller;
 
 import hu.adatba.App;
+import hu.adatba.Model.Book;
+import hu.adatba.Model.Order;
+import hu.adatba.Model.User;
+import hu.adatba.Service.OrderService;
 import hu.adatba.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class OrderController {
     // Adattagok
     @FXML
     private Text selectedBookT;
+
     @FXML
-    private Button cancelBTN;
+    private TextField fullnameTF, addressTF, creditnumberTF;
+
+    @FXML
+    private Button cancelBTN, orderBTN;
+
+    @FXML
+    private Label messageLabel;
+
+    private final OrderService orderService = new OrderService();
+    User user;
+    Book selectedBook;
+
+    public OrderController() throws SQLException {
+    }
 
     // Metódusok
     @FXML
     public void initialize() {
-        selectedBookT.setText(Session.getSelectedBook().getAuthor() + " - " + Session.getSelectedBook().getTitle());
+        user = Session.getUser();
+        selectedBook = Session.getSelectedBook();
+        selectedBookT.setText(selectedBook.getAuthor() + " - " + selectedBook.getTitle());
+
+        if(user.getRole().equals("felhasznalo")){
+            fullnameTF.setText(user.getFullName());
+            addressTF.setText(user.getPostalAddress());
+            creditnumberTF.setText(user.getCreditNumber());
+            fullnameTF.setDisable(true);
+            addressTF.setDisable(true);
+            creditnumberTF.setDisable(true);
+        }
+
         cancelBTN.setOnAction(e -> {
             try {
                 switchToListBooks();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        orderBTN.setOnAction(e -> {
+            try {
+                handleOrder();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -32,5 +73,34 @@ public class OrderController {
     private void switchToListBooks() throws IOException {
         Session.clearSelectedBook();
         App.setRoot("list_books");
+    }
+
+    private void handleOrder() throws IOException {
+        if(user.getRole().equals("latogato")){
+            String fullname = fullnameTF.getText();
+            String address = addressTF.getText();
+            String creditnumber = creditnumberTF.getText();
+
+            if(fullname.isEmpty() || address.isEmpty() || creditnumber.isEmpty()){
+                messageLabel.setText("Helytelen adatok!");
+                return;
+            }
+
+            Order order = new Order(user.getIpAddress(), selectedBook.getBookID(), address, creditnumber, fullname);
+            if(orderService.addOrder(order)){
+                messageLabel.setText("Sikeres rendelés!");
+            }
+            else{
+                messageLabel.setText("Sikertelen rendelés!");
+            }
+        }
+        else{
+            if(orderService.addOrder(new Order(user.getUserID(), selectedBook.getBookID()))){
+                messageLabel.setText("Sikeres rendelés!");
+            }
+            else{
+                messageLabel.setText("Sikertelen rendelés!");
+            }
+        }
     }
 }

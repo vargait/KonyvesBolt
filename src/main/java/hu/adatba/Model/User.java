@@ -100,4 +100,12 @@ public class User {
     public void setRole(String Role) {
         this.Role = Role;
     }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
 }
