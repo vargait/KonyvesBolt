@@ -1,12 +1,16 @@
 package hu.adatba.DAO;
 
 import hu.adatba.Model.Order;
+import hu.adatba.Model.QueryResult;
 import hu.adatba.Session;
 import hu.adatba.db.DBConnect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,5 +67,58 @@ public class OrderDAO {
             }
         }
         return false;
+    }
+
+    // ÖSSZETETT LEKÉRDEZÉSEK
+
+    // +5 féle összetett lekérdezés megvalósítása statisztika jelleggel - admin
+    public List<QueryResult> getQueryResults(int queryIndex) {
+        String sql = "";
+        switch (queryIndex) {
+            case 1: sql = "SELECT f.FELHASZNALONEV, COUNT(r.RENDELESFID) AS RENDELES_DB " +
+                    "FROM FELHASZNALO f " +
+                    "JOIN RENDELES_F r ON f.USERID = r.USERID " +
+                    "WHERE f.TORZSVASARLO = 1 " +
+                    "GROUP BY f.FELHASZNALONEV"; break;
+
+            case 2: sql = "SELECT f.FELHASZNALONEV, SUM(sz.AR) AS OSSZ_KOLTSEG " +
+                    "FROM FELHASZNALO f " +
+                    "JOIN RENDELES_F r ON f.USERID = r.USERID " +
+                    "JOIN SZAMLA_F sz ON sz.RENDELESFID = r.RENDELESFID " +
+                    "GROUP BY f.FELHASZNALONEV " +
+                    "ORDER BY OSSZ_KOLTSEG DESC"; break;
+
+            case 3: sql = "SELECT f.FELHASZNALONEV, k.CIM " +
+                    "FROM RENDELES_F r " +
+                    "JOIN KONYV k ON r.KONYVID = k.KONYVID " +
+                    "JOIN FELHASZNALO f ON r.RENDELESFID = f.USERID " +
+                    "WHERE r.AKCIO_E = 1"; break;
+
+            case 4: sql = "SELECT sz.DATUM_EV, COUNT(*) AS KONYV_ELADAS_DB " +
+                    "FROM SZAMLA_F sz " +
+                    "GROUP BY sz.DATUM_EV " +
+                    "ORDER BY sz.DATUM_EV"; break;
+
+            case 5: sql = "SELECT k.MUFAJNEV, COUNT(r.RENDELESFID) AS ELADOTT_DB " +
+                    "FROM KONYV k " +
+                    "JOIN RENDELES_F r ON k.KONYVID = r.KONYVID " +
+                    "GROUP BY k.MUFAJNEV " +
+                    "ORDER BY ELADOTT_DB DESC"; break;
+        }
+
+
+        List<QueryResult> result = new ArrayList<>();
+        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
+            while (rs.next()) {
+                QueryResult qr = new QueryResult(
+                        rs.getString(1),
+                        rs.getString(2)
+                );
+                result.add(qr);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }
