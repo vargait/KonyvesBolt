@@ -63,7 +63,7 @@ public class ListBooksController {
     private Button editprofileBTN;
 
     @FXML
-    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN;
+    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, myordersBTN;
 
     @FXML
     private TextField searchTF;
@@ -105,9 +105,11 @@ public class ListBooksController {
                 addbooksBTN.setVisible(true);
                 addgenresBTN.setVisible(true);
                 statBTN.setVisible(true);
+
             }
             if(!user.getRole().equals("latogato")) {
                 editprofileBTN.setVisible(true);
+                myordersBTN.setVisible(true);
 
             }
         }
@@ -134,6 +136,13 @@ public class ListBooksController {
 
         bestsellerBTN.setOnAction(e -> {
             listBestsellers();
+        });
+        myordersBTN.setOnAction(e -> {
+            try {
+                switchToMyOrders();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
     }
 
@@ -265,5 +274,8 @@ public class ListBooksController {
     @FXML
     private void switchToAddGenres() throws IOException{
         App.setRoot("add_genres");
+    }
+    private void switchToMyOrders() throws IOException{
+        App.setRoot("my_orders");
     }
 }
