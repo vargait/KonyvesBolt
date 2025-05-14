@@ -1,10 +1,12 @@
 package hu.adatba.DAO;
 
+import hu.adatba.Model.Book;
 import hu.adatba.Model.Order;
 import hu.adatba.Model.QueryResult;
 import hu.adatba.Session;
 import hu.adatba.db.DBConnect;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +18,6 @@ import java.util.logging.Logger;
 
 public class OrderDAO {
     private static final Logger logger = Logger.getLogger(OrderDAO.class.getName());
-
     // Csatlakozás a DB-hez
     private final Connection conn;
 
@@ -120,5 +121,31 @@ public class OrderDAO {
             throw new RuntimeException(e);
         }
         return result;
+    }
+
+    public Order getOrder(ResultSet rs) throws SQLException{
+        Order order = new Order(
+                rs.getInt("USERID"),
+                rs.getInt("KONYVID")
+        );
+        order.setOrderID(rs.getInt("RENDELESFID"));
+        return order;
+    }
+    // Összes könyv lekérdezése
+    public List<Order> getAllBooks() {
+        int uid = Session.getUser().getUserID();
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM RENDELES_F WHERE USERID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, uid);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                orders.add(getOrder(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orders;
     }
 }
