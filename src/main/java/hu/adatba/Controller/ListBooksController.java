@@ -110,7 +110,7 @@ public class ListBooksController {
             if(!user.getRole().equals("latogato")) {
                 editprofileBTN.setVisible(true);
                 myordersBTN.setVisible(true);
-
+                invoicesBTN.setVisible(true);
             }
         }
 
