@@ -8,6 +8,8 @@ public class Order {
     private String CreditNumber;
     private String Fullname;
     private String ipAddress;
+    private String BookTitle;
+    private String Discounted;
 
     // Bejelentkezett rendelés
     public Order(int UserID, int BookID) {
@@ -24,7 +26,32 @@ public class Order {
         this.Fullname = Fullname;
     }
 
+    public Order(int OrderID, int Discounted, String Fullname, String BookTitle){
+        this.OrderID = OrderID;
+        this.Fullname = Fullname;
+        this.Discounted = Discounted == 1 ? "Igen" : "Nem";
+        this.BookTitle = BookTitle;
+    }
+
     // Getter - Setter
+
+
+    public String getDiscounted() {
+        return Discounted;
+    }
+
+    public void setDiscounted(String discounted) {
+        Discounted = discounted;
+    }
+
+    public String getBookTitle() {
+        return BookTitle;
+    }
+
+    public void setBookTitle(String bookTitle) {
+        BookTitle = bookTitle;
+    }
+
     public int getOrderID() {
         return OrderID;
     }

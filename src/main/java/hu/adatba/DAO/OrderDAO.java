@@ -1,12 +1,10 @@
 package hu.adatba.DAO;
 
-import hu.adatba.Model.Book;
 import hu.adatba.Model.Order;
 import hu.adatba.Model.QueryResult;
 import hu.adatba.Session;
 import hu.adatba.db.DBConnect;
 
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -133,20 +131,32 @@ public class OrderDAO {
     }
 
     public Order getOrder(ResultSet rs) throws SQLException {
-        Order order = new Order(
-                rs.getInt("USERID"),
-                rs.getInt("KONYVID")
+        return new Order(
+                rs.getInt(1),
+                rs.getInt(2),
+                rs.getString(3),
+                rs.getString(4)
         );
-        order.setOrderID(rs.getInt("RENDELESFID"));
-        return order;
     }
 
     // Összes könyv lekérdezése
-    public List<Order> getAllBooks() {
+    public List<Order> getAllBooks(String type) {
         int uid = Session.getUser().getUserID();
+        List<Order> orders = new ArrayList<>();
         if (Session.getUser().getRole().equals("admin")) {
-            List<Order> orders = new ArrayList<>();
-            String sql = "SELECT * FROM RENDELES_F ORDER BY RENDELESFID";
+            String sql;
+            if(type.equals("felhasznalo")){
+                sql = "SELECT RENDELESFID, AKCIO_E, FELHASZNALO.FELHASZNALONEV AS USERNAME, KONYV.CIM AS TITLE FROM RENDELES_F " +
+                        "JOIN FELHASZNALO ON RENDELES_F.USERID = FELHASZNALO.USERID " +
+                        "JOIN KONYV ON RENDELES_F.KONYVID = KONYV.KONYVID " +
+                        "ORDER BY RENDELESFID";
+            }
+            else{
+                sql = "SELECT RENDELESLID, AKCIO_E, IP_CIM AS IPADDRESS, KONYV.CIM AS TITLE FROM RENDELES_L " +
+                        "JOIN KONYV ON RENDELES_L.KONYVID = KONYV.KONYVID " +
+                        "ORDER BY RENDELESLID";
+            }
+
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 ResultSet rs = stmt.executeQuery();
 
@@ -156,13 +166,14 @@ public class OrderDAO {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            return orders;
 
         } else {
 
 
-            List<Order> orders = new ArrayList<>();
-            String sql = "SELECT * FROM RENDELES_F WHERE USERID = ?";
+            String sql = "SELECT RENDELESFID, AKCIO_E, FELHASZNALO.FELHASZNALONEV AS USERNAME, KONYV.CIM AS TITLE FROM RENDELES_F " +
+                    "JOIN FELHASZNALO ON RENDELES_F.USERID = FELHASZNALO.USERID " +
+                    "JOIN KONYV ON RENDELES_F.KONYVID = KONYV.KONYVID " +
+                    "WHERE RENDELES_F.USERID = ? ORDER BY RENDELESFID";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, uid);
                 ResultSet rs = stmt.executeQuery();
@@ -173,8 +184,7 @@ public class OrderDAO {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            return orders;
         }
-
+        return orders;
     }
 }

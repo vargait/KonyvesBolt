@@ -63,7 +63,7 @@ public class ListBooksController {
     private Button editprofileBTN;
 
     @FXML
-    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, myordersBTN;
+    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, myordersBTN, invoicesBTN;
 
     @FXML
     private TextField searchTF;
@@ -130,16 +130,20 @@ public class ListBooksController {
             }
         });
 
-        searchBTN.setOnAction(e -> {
-            listBooksBySearch();
-        });
+        searchBTN.setOnAction(e -> listBooksBySearch());
 
-        bestsellerBTN.setOnAction(e -> {
-            listBestsellers();
-        });
+        bestsellerBTN.setOnAction(e -> listBestsellers());
         myordersBTN.setOnAction(e -> {
             try {
                 switchToMyOrders();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        invoicesBTN.setOnAction(e -> {
+            try {
+                switchToInvoices();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -240,6 +244,9 @@ public class ListBooksController {
         }
 
         listbooksTV.getColumns().add(listActionTC);
+    }
+    private void switchToInvoices() throws IOException {
+        App.setRoot("invoices");
     }
 
     private void switchToStats() throws IOException {

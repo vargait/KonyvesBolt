@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.MyOrdersController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.MyOrdersController">
    <children>
-      <TableView fx:id="orderlistTV" layoutX="114.0" layoutY="14.0" prefHeight="316.0" prefWidth="228.0">
+       <ComboBox fx:id="queryCB" layoutX="171.0" layoutY="14.0" onAction="#myOrdersToTable" prefHeight="25.0" prefWidth="258.0" visible="false"/>
+      <TableView fx:id="orderlistTV" layoutX="140.0" layoutY="64.0" prefHeight="316.0" prefWidth="321.0">
         <columns>
-          <TableColumn fx:id="orderlistOID" prefWidth="75.0" text="RendelésID" />
-            <TableColumn fx:id="orderlistUID" prefWidth="75.0" text="USERID" />
-            <TableColumn fx:id="orderlistBID" prefWidth="75.0" text="KÖNYVID" />
-            <TableColumn fx:id="myordersUID1" prefWidth="75.0" text="USERID" />
-            <TableColumn fx:id="myordersUID2" prefWidth="75.0" text="USERID" />
+          <TableColumn fx:id="orderidTC" prefWidth="75.0" text="Rendelés #" />
+            <TableColumn fx:id="discountedTC" prefWidth="75.0" text="Akciós-e" />
+            <TableColumn fx:id="usernameTC" prefWidth="100.0" text="Felhasználónév" />
+            <TableColumn fx:id="titleTC" prefWidth="70.0" text="Könyv címe" />
         </columns>
       </TableView>
-      <Button fx:id="getbackBTN" layoutX="368.0" layoutY="355.0" mnemonicParsing="false" text="Vissza" />
+      <Button fx:id="getbackBTN" layoutX="27.0" layoutY="14.0" mnemonicParsing="false" text="Vissza" />
    </children>
 </AnchorPane>
