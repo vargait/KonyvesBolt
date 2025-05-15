@@ -1,9 +1,7 @@
 package hu.adatba.DAO;
 
 import hu.adatba.Model.Book;
-import hu.adatba.Model.QueryResult;
 import hu.adatba.db.DBConnect;
-import oracle.jdbc.proxy.annotation.Pre;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -221,17 +219,31 @@ public class BookDAO {
         return subgenres;
     }
 
+    // Akciós könyvek lekérdezése
+    public List<Book> getDiscountedBooks() {
+        List<Book> discountedBooks = new ArrayList<>();
+        String sql = "SELECT * FROM KONYV WHERE AR <= 2000 ORDER BY AR";
+        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
+            while (rs.next()) {
+                discountedBooks.add(getBook(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return discountedBooks;
+    }
+
     // Legtöbbször rendelt könyvek (TOP 3) - Összetett lekérdezés
     public List<Book> getBestsellers(){
         List<Book> books = new ArrayList<>();
-        String sql = "SELECT k.* " +
-                "FROM KONYV k " +
+        String sql = "SELECT k.* FROM KONYV k " +
                 "JOIN ( " +
-                "SELECT KONYVID, COUNT(*) AS RENDELES_SZAM " +
-                "FROM RENDELES_F " +
-                "GROUP BY KONYVID " +
-                "ORDER BY RENDELES_SZAM DESC " +
-                "FETCH FIRST 3 ROWS ONLY " +
+                "    SELECT rf.KONYVID, COUNT(*) AS RENDELES_SZAM " +
+                "    FROM RENDELES_F rf " +
+                "    JOIN KONYV k2 ON rf.KONYVID = k2.KONYVID " +
+                "    GROUP BY rf.KONYVID " +
+                "    ORDER BY COUNT(*) DESC " +
+                "    FETCH FIRST 3 ROWS ONLY " +
                 ") top_books ON k.KONYVID = top_books.KONYVID " +
                 "ORDER BY top_books.RENDELES_SZAM DESC";
         try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){

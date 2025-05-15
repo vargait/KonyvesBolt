@@ -63,7 +63,7 @@ public class ListBooksController {
     private Button editprofileBTN;
 
     @FXML
-    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, myordersBTN, invoicesBTN;
+    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, myordersBTN, invoicesBTN, discountedBTN;
 
     @FXML
     private TextField searchTF;
@@ -133,6 +133,9 @@ public class ListBooksController {
         searchBTN.setOnAction(e -> listBooksBySearch());
 
         bestsellerBTN.setOnAction(e -> listBestsellers());
+
+        discountedBTN.setOnAction(e -> listDiscountedBooks());
+
         myordersBTN.setOnAction(e -> {
             try {
                 switchToMyOrders();
@@ -170,6 +173,14 @@ public class ListBooksController {
         listbooksTV.getItems().clear();
         List<Book> books = bookService.getBestsellers();
         resultcountT.setText("Top 3 könyv");
+        listbooksTV.setItems(FXCollections.observableArrayList(books));
+    }
+
+    // Akciós könyvek keresése
+    private void listDiscountedBooks(){
+        listbooksTV.getItems().clear();
+        List<Book> books = bookService.getDiscountedBooks();
+        resultcountT.setText(books.size() + " találat");
         listbooksTV.setItems(FXCollections.observableArrayList(books));
     }
 

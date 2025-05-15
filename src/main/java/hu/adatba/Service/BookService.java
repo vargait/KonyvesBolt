@@ -56,6 +56,11 @@ public class BookService {
         return bookDAO.getBestsellers();
     }
 
+    // Akciós könyvek lekérdezése
+    public List<Book> getDiscountedBooks(){
+        return bookDAO.getDiscountedBooks();
+    }
+
     // Műfaj lekérdezése
     public List<String> getGenres(){
         return bookDAO.getGenresFromDB();
