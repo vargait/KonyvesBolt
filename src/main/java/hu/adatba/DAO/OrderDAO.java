@@ -5,10 +5,7 @@ import hu.adatba.Model.QueryResult;
 import hu.adatba.Session;
 import hu.adatba.db.DBConnect;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,6 +23,7 @@ public class OrderDAO {
     // Rendelés hozzáadása DB-hez
     public boolean insertOrder(Order order) {
         String sql;
+        String procall = "{call DELETE_NULL_DARAB_KONYV}";
         if (Session.getUser().getRole().equals("latogato")) {
             sql = "INSERT INTO RENDELES_L (IP_CIM, KONYVID, FELH_CIM, FELH_KARTYA, FELH_NEV) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -34,10 +32,12 @@ public class OrderDAO {
                 stmt.setString(3, order.getAddress());
                 stmt.setString(4, order.getCreditNumber());
                 stmt.setString(5, order.getFullname());
-
                 int rowsAdded = stmt.executeUpdate();
+
                 if (rowsAdded > 0) {
                     logger.log(Level.INFO, "Rendeles hozzaadasa DB-hez sikeres.");
+                    CallableStatement procallCS = conn.prepareCall(procall);
+                    procallCS.execute();
                     return true;
                 } else {
                     logger.log(Level.SEVERE, "Rendeles hozzaadasa DB-hez sikertelen: lefutott, 0 sor hozzaadva");
@@ -51,15 +51,17 @@ public class OrderDAO {
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, order.getUserID());
                 stmt.setInt(2, order.getBookID());
-
                 int rowsAdded = stmt.executeUpdate();
                 if (rowsAdded > 0) {
                     logger.log(Level.INFO, "Rendeles hozzaadasa DB-hez sikeres.");
+                    CallableStatement procallCS = conn.prepareCall(procall);
+                    procallCS.execute();
                     return true;
                 } else {
                     logger.log(Level.SEVERE, "Rendeles hozzaadasa DB-hez sikertelen: lefutott, 0 sor hozzaadva");
                     return false;
                 }
+
             } catch (SQLException e) {
                 logger.log(Level.SEVERE, "Rendeles hozzaadasa DB-hez sikertelen: ", e);
             }
@@ -187,4 +189,5 @@ public class OrderDAO {
         }
         return orders;
     }
+
 }
