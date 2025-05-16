@@ -24,7 +24,7 @@
             <TableColumn fx:id="listbindingTC" text="Kötés" />
             <TableColumn fx:id="listebookTC" text="E-book" />
             <TableColumn fx:id="listsizeTC" text="Méret" />
-            <TableColumn fx:id="listavailableamountTC" text="Darabszám" />
+            <TableColumn fx:id="listdiscountedTC" text="Akciós" />
             <TableColumn fx:id="listpriceTC" text="Ár" />
         </columns>
     </TableView>

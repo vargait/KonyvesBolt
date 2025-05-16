@@ -84,17 +84,10 @@ public class LoginController {
     }
 
     private void handleGuestLogin() throws IOException{
-        try {
-            InetAddress ip = InetAddress.getLocalHost();
-            String ipAddress = ip.getHostAddress();
-            System.out.println(ipAddress);
-            User user = userService.loginAsGuest(ipAddress);
-            Session.setUser(user);
-            messageLabel.setText("Sikeres bejelentkezés!");
-            App.setRoot("list_books");
-        } catch (UnknownHostException e) {
-            logger.log(Level.SEVERE, "Nem sikerult lekerni az ip cimet");
-        }
+        User user = userService.loginAsGuest();
+        Session.setUser(user);
+        messageLabel.setText("Sikeres bejelentkezés!");
+        App.setRoot("list_books");
     }
 
     @FXML

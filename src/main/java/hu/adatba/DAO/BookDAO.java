@@ -24,22 +24,21 @@ public class BookDAO {
 
     // Könyv hozzáadása DB-hez
     public boolean insertBook(Book book) {
-        String sql = "INSERT INTO KONYV (KIADAS_EVE, OLDALSZAM, DARAB, SZERZO, EKONYV, KOTES, AR, MERET, CIM, MUFAJNEV, ALMUFAJ, KIADO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO KONYV (CIM, KIADAS_EVE, OLDALSZAM, KOTES, AR, SZERZO, MERET, EKONYV, KIADO, MUFAJID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, book.getPublicationYear());
-            stmt.setInt(2, book.getPages());
-            stmt.setInt(3, book.getAvailableAmount());
-            stmt.setString(4, book.getAuthor());
+            stmt.setString(1, book.getTitle());
+            stmt.setInt(2, book.getPublicationYear());
+            stmt.setInt(3, book.getPages());
+            stmt.setString(4, book.getBinding());
+            stmt.setInt(5, book.getPrice());
+            stmt.setString(6, book.getAuthor());
+            stmt.setString(7, book.getSize());
             int ebook = 0;
             if (book.getEbook().equals("Igen")) { ebook = 1;}
-            stmt.setInt(5, ebook);
-            stmt.setString(6, book.getBinding());
-            stmt.setInt(7, book.getPrice());
-            stmt.setString(8, book.getSize());
-            stmt.setString(9, book.getTitle());
-            stmt.setString(10, book.getGenre());
-            stmt.setString(11, book.getSubGenre());
-            stmt.setString(12, book.getPublisher());
+            stmt.setInt(8, ebook);
+            stmt.setString(9, book.getPublisher());
+            stmt.setInt(10, book.getGenreID());
+
 
             int rowsAdded = stmt.executeUpdate();
             if (rowsAdded > 0) {
@@ -62,16 +61,15 @@ public class BookDAO {
                 rs.getString("KIADO"),
                 rs.getString("SZERZO"),
                 rs.getString("CIM"),
-                rs.getString("MUFAJNEV"),
-                rs.getString("ALMUFAJ"),
+                rs.getInt("MUFAJID"),
                 rs.getInt("OLDALSZAM"),
-                rs.getInt("DARAB"),
                 rs.getInt("EKONYV"),
                 rs.getString("KOTES"),
                 rs.getInt("AR"),
                 rs.getString("MERET")
         );
         book.setBookID(rs.getInt("KONYVID"));
+        book.setDiscounted(rs.getInt("AKCIOS_E"));
         return book;
     }
 
@@ -92,12 +90,10 @@ public class BookDAO {
     // Könyvek lekérdezése DB-ből kulcsszó alapján
     public List<Book> getBooksByKeyword(String keyword) {
         List<Book> books = new ArrayList<>();
-        String sql = "SELECT * FROM KONYV WHERE LOWER(CIM) LIKE ? OR LOWER(SZERZO) LIKE ? OR LOWER(MUFAJNEV) LIKE ? OR LOWER(ALMUFAJ) LIKE ? ORDER BY CIM";
+        String sql = "SELECT * FROM KONYV WHERE LOWER(CIM) LIKE ? OR LOWER(SZERZO) LIKE ? ORDER BY CIM";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, "%" + keyword + "%");
             stmt.setString(2, "%" + keyword + "%");
-            stmt.setString(3, "%" + keyword + "%");
-            stmt.setString(4, "%" + keyword + "%");
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     books.add(getBook(rs));
@@ -148,23 +144,21 @@ public class BookDAO {
 
     // Könyv módosítása DB-ben
     public boolean update(Book book) {
-        String sql = "UPDATE KONYV SET KIADAS_EVE = ?, KIADO = ?, SZERZO = ?, CIM = ?, MUFAJNEV = ?, ALMUFAJ = ?, OLDALSZAM = ?, DARAB = ?, EKONYV = ?, KOTES = ?, AR = ?, MERET = ? WHERE KONYVID = ?";
+        String sql = "UPDATE KONYV SET KIADAS_EVE = ?, KIADO = ?, SZERZO = ?, CIM = ?, MUFAJID = ?, OLDALSZAM = ?, EKONYV = ?, KOTES = ?, AR = ?, MERET = ? WHERE KONYVID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, book.getPublicationYear());
             stmt.setString(2, book.getPublisher());
             stmt.setString(3, book.getAuthor());
             stmt.setString(4, book.getTitle());
-            stmt.setString(5, book.getGenre());
-            stmt.setString(6, book.getSubGenre());
-            stmt.setInt(7, book.getPages());
-            stmt.setInt(8, book.getAvailableAmount());
+            stmt.setInt(5, book.getGenreID());
+            stmt.setInt(6, book.getPages());
             int ebook = 0;
             if (book.getEbook().equals("Igen")) { ebook = 1;}
-            stmt.setInt(9, ebook);
-            stmt.setString(10, book.getBinding());
-            stmt.setInt(11, book.getPrice());
-            stmt.setString(12, book.getSize());
-            stmt.setInt(13, book.getBookID());
+            stmt.setInt(7, ebook);
+            stmt.setString(8, book.getBinding());
+            stmt.setInt(9, book.getPrice());
+            stmt.setString(10, book.getSize());
+            stmt.setInt(11, book.getBookID());
 
             int rows = stmt.executeUpdate();
             return rows > 0;
@@ -188,41 +182,10 @@ public class BookDAO {
         }
     }
 
-    // Műfajok lekérdezése DB-ből
-    public List<String> getGenresFromDB() {
-        List<String> genres = new ArrayList<>();
-        String sql = "SELECT DISTINCT MUFAJNEV FROM MUFAJ ORDER BY MUFAJNEV";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                genres.add(rs.getString("MUFAJNEV"));
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Mufajok lekerdezese sikertelen.", e);
-        }
-        return genres;
-    }
-
-    // Alműfajok lekérdezése DB-ből
-    public List<String> getSubGenresFromDB(String genre) {
-        List<String> subgenres = new ArrayList<>();
-        String sql = "SELECT DISTINCT ALMUFAJ FROM MUFAJ WHERE MUFAJNEV = ? ORDER BY ALMUFAJ";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, genre);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                subgenres.add(rs.getString("ALMUFAJ"));
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Almufajok lekerdezese sikertelen.", e);
-        }
-        return subgenres;
-    }
-
     // Akciós könyvek lekérdezése
     public List<Book> getDiscountedBooks() {
         List<Book> discountedBooks = new ArrayList<>();
-        String sql = "SELECT * FROM KONYV WHERE AR <= 2000 ORDER BY AR";
+        String sql = "SELECT * FROM KONYV WHERE AKCIOS_E = 1 ORDER BY AR";
         try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
             while (rs.next()) {
                 discountedBooks.add(getBook(rs));
@@ -236,6 +199,8 @@ public class BookDAO {
     // Legtöbbször rendelt könyvek (TOP 3) - Összetett lekérdezés
     public List<Book> getBestsellers(){
         List<Book> books = new ArrayList<>();
+        /*
+
         String sql = "SELECT k.* FROM KONYV k " +
                 "JOIN ( " +
                 "    SELECT rf.KONYVID, COUNT(*) AS RENDELES_SZAM " +
@@ -253,6 +218,9 @@ public class BookDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return books;
+
+        */
         return books;
     }
 }

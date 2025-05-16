@@ -13,8 +13,8 @@ public class InvoiceService {
     public InvoiceService() throws SQLException {
         this.invoiceDAO = new InvoiceDAO();
     }
-
+/*
     public List<Invoice> getAllInvoices(String type){
         return invoiceDAO.getAllInvoices(type);
-    }
+    }*/
 }

@@ -2,7 +2,9 @@ package hu.adatba.Controller;
 
 import hu.adatba.App;
 import hu.adatba.Model.Book;
+import hu.adatba.Model.Genre;
 import hu.adatba.Service.BookService;
+import hu.adatba.Service.GenreService;
 import hu.adatba.Session;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,7 +20,7 @@ import java.util.Objects;
 public class EditBookController {
     // Adattagok
     @FXML
-    private TextField editbooktitleTF, editbookauthorTF, editbookpublisherTF, editbookbindingTF, editbookavailableamountTF, editbookpagesTF, editbookpriceTF;
+    private TextField editbooktitleTF, editbookauthorTF, editbookpublisherTF, editbookbindingTF, editbookpagesTF, editbookpriceTF;
 
     @FXML
     private Spinner<String> editbookgenreSP;
@@ -45,6 +47,7 @@ public class EditBookController {
     private Label messageLabel;
 
     private final BookService bookService = new BookService();
+    private final GenreService genreService = new GenreService();
 
     public EditBookController() throws SQLException {
     }
@@ -57,7 +60,6 @@ public class EditBookController {
         editbookauthorTF.setText(Session.getSelectedBook().getAuthor());
         editbookpublisherTF.setText(Session.getSelectedBook().getPublisher());
         editbookbindingTF.setText(Session.getSelectedBook().getBinding());
-        editbookavailableamountTF.setText(String.valueOf(Session.getSelectedBook().getAvailableAmount()));
         editbookpagesTF.setText(String.valueOf(Session.getSelectedBook().getPages()));
         editbookpriceTF.setText(String.valueOf(Session.getSelectedBook().getPrice()));
 
@@ -80,27 +82,27 @@ public class EditBookController {
         editbookebookSP.setValueFactory(valueFactory);
 
         // Műfaj Spinner
-        options = FXCollections.observableArrayList(bookService.getGenres());
+        options = FXCollections.observableArrayList(genreService.getGenres());
         valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(options);
-        valueFactory.setValue(Session.getSelectedBook().getGenre());
+        valueFactory.setValue(Session.getSelectedBook().getGenre().getGenreName());
         editbookgenreSP.setValueFactory(valueFactory);
 
         // Alműfaj Spinner
         editbookgenreSP.valueProperty().addListener((obs, oldGenre, newGenre) -> {
-            List<String> subgenres = bookService.getSubGenres(newGenre);
+            List<String> subgenres = genreService.getSubGenres(newGenre);
             ObservableList<String> subgenreOptions = FXCollections.observableArrayList(subgenres);
             SpinnerValueFactory<String> subgenreFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(subgenreOptions);
             subgenreFactory.setValue(subgenres.isEmpty() ? "" : subgenres.get(0));
-            subgenreFactory.setValue(Session.getSelectedBook().getSubGenre());
+            subgenreFactory.setValue(Session.getSelectedBook().getGenre().getSubGenreName());
             editbooksubgenreSP.setValueFactory(subgenreFactory);
         });
 
         // Alapértelmezett alműfaj beállítása az első műfaj alapján
-        List<String> genres = bookService.getGenres();
+        List<String> genres = genreService.getGenres();
         if (!genres.isEmpty()) {
-            List<String> initialSubgenres = bookService.getSubGenres(genres.get(0));
+            List<String> initialSubgenres = genreService.getSubGenres(genres.get(0));
             SpinnerValueFactory<String> initialSubgenreFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(FXCollections.observableArrayList(initialSubgenres));
-            initialSubgenreFactory.setValue(Session.getSelectedBook().getSubGenre());
+            initialSubgenreFactory.setValue(Session.getSelectedBook().getGenre().getGenreName());
             editbooksubgenreSP.setValueFactory(initialSubgenreFactory);
         }
 
@@ -125,8 +127,7 @@ public class EditBookController {
         try {
             // Input kezelés
             int PublicationYear = editbookyearSP.getValue();
-            String Genre = editbookgenreSP.getValue();
-            String SubGenre = editbooksubgenreSP.getValue();
+            Genre genre = genreService.getGenreByGenreAndSubgenre(editbookgenreSP.getValue(), editbooksubgenreSP.getValue());
             String Size = editbooksizeSP.getValue();
             String Publisher = editbookpublisherTF.getText().trim();
             String Author = editbookauthorTF.getText().trim();
@@ -134,20 +135,19 @@ public class EditBookController {
             String Binding = editbookbindingTF.getText().trim();
             int Pages = Integer.parseInt(editbookpagesTF.getText().trim());
             int Price = Integer.parseInt(editbookpriceTF.getText().trim());
-            int AvailableAmount = Integer.parseInt(editbookavailableamountTF.getText().trim());
             int Ebook = 0;
             if (Objects.equals(editbookebookSP.getValue(), "Igen")) {
                 Ebook = 1;
             }
 
             // Üres input kezelés
-            if(Publisher.isEmpty() || Author.isEmpty() || Title.isEmpty() || Genre.isEmpty() || SubGenre.isEmpty() || Binding.isEmpty() || Price < 0 || Pages < 1 || AvailableAmount < 1) {
+            if(Publisher.isEmpty() || Author.isEmpty() || Title.isEmpty() || Binding.isEmpty() || Price < 0 || Pages < 1) {
                 messageLabel.setText("Helytelen adatok!");
                 return;
             }
 
             // Módosítás
-            Book book = new Book(PublicationYear, Publisher, Author, Title, Genre, SubGenre, Pages, AvailableAmount, Ebook, Binding, Price, Size);
+            Book book = new Book(PublicationYear, Publisher, Author, Title, genre.getGenreID(), Pages, Ebook, Binding, Price, Size);
             book.setBookID(Session.getSelectedBook().getBookID());
             if(bookService.updateBook(book)){
                 messageLabel.setText("Sikeres módosítás!");
@@ -157,6 +157,8 @@ public class EditBookController {
             }
         } catch (RuntimeException e) {
             messageLabel.setText("Sikertelen mentés!");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

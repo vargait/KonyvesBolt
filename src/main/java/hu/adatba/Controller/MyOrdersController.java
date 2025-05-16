@@ -33,7 +33,7 @@ public class MyOrdersController {
     private Button getbackBTN;
 
     public MyOrdersController() throws SQLException {
-    }
+    }/*
 
     public void initialize() {
         if(Session.getUser().getRole().equals("admin")) {
@@ -82,5 +82,5 @@ public class MyOrdersController {
     private void switchToListBooks() throws IOException{
         App.setRoot("list_books");
     }
-
+*/
 }

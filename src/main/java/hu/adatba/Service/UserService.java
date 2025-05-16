@@ -54,8 +54,8 @@ public class UserService {
     }
 
     // Bejelentkezés látogatóként
-    public User loginAsGuest(String ipAddress){
-        User user = new User(ipAddress);
+    public User loginAsGuest(){
+        User user = new User();
         user.setRole("latogato");
         return user;
     }

@@ -33,7 +33,7 @@ public class InvoicesController {
     private final InvoiceService invoiceService = new InvoiceService();
 
     public InvoicesController() throws SQLException {
-    }
+    }/*
 
     // Metódusok
     @FXML
@@ -79,7 +79,7 @@ public class InvoicesController {
 
         invoicelistTV.setItems(FXCollections.observableArrayList(invoices));
 
-    }
+    }*/
 
     private void switchToListBooks() throws IOException {
         App.setRoot("list_books");

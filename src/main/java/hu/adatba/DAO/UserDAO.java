@@ -22,15 +22,16 @@ public class UserDAO {
 
     // Felhasználó hozzáadása DB-hez
     public boolean insertUser(User user) {
-        String sql = "INSERT INTO FELHASZNALO (FELHASZNALONEV, EMAIL, JELSZO, TORZSVASARLO, TELJES_NEV, FELH_CIM, FELH_KARTYASZAM) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO FELHASZNALO (FELHASZNALONEV, EMAIL, JELSZO, TELJES_NEV, SZALLITASI_CIM, KARTYASZAM, TORZSVASARLO, ROLE) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
-            stmt.setInt(4, user.isVIP() ? 1 : 0);
-            stmt.setString(5, user.getFullName());
-            stmt.setString(6, user.getPostalAddress());
-            stmt.setString(7, user.getCreditNumber());
+            stmt.setString(4, user.getFullName());
+            stmt.setString(5, user.getPostalAddress());
+            stmt.setString(6, user.getCreditNumber());
+            stmt.setInt(7, user.isVIP() ? 1 : 0);
+            stmt.setString(8, "felhasznalo");
 
             int rowsAdded = stmt.executeUpdate();
             if (rowsAdded > 0) {
@@ -62,8 +63,8 @@ public class UserDAO {
                         rs.getString("JELSZO"),
                         rs.getInt("TORZSVASARLO"),
                         rs.getString("TELJES_NEV"),
-                        rs.getString("FELH_CIM"),
-                        rs.getString("FELH_KARTYASZAM")
+                        rs.getString("SZALLITASI_CIM"),
+                        rs.getString("KARTYASZAM")
                 );
                 user.setUserID(rs.getInt("USERID"));
                 user.setRole(rs.getString("ROLE"));
@@ -77,7 +78,7 @@ public class UserDAO {
 
     // Felhasználó módosítása DB-ben
     public boolean update(User user) {
-        String sql = "UPDATE FELHASZNALO SET FELHASZNALONEV = ?, EMAIL = ?, JELSZO = ?, TELJES_NEV = ?, FELH_CIM = ?, FELH_KARTYASZAM = ? WHERE USERID = ?";
+        String sql = "UPDATE FELHASZNALO SET FELHASZNALONEV = ?, EMAIL = ?, JELSZO = ?, TELJES_NEV = ?, SZALLITASI_CIM = ?, KARTYASZAM = ? WHERE USERID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());

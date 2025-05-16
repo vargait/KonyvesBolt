@@ -3,54 +3,27 @@ package hu.adatba.Model;
 public class Order {
     private int OrderID;
     private int UserID;
-    private int BookID;
-    private String Address;
-    private String CreditNumber;
-    private String Fullname;
-    private String ipAddress;
-    private String BookTitle;
-    private String Discounted;
+    private int OrderDate;
+    private int TotalPrice;
+    private String orderAddress;
 
-    // Bejelentkezett rendelés
-    public Order(int UserID, int BookID) {
+    // Konstruktor beszúráshoz
+    public Order(int UserID, int TotalPrice, String orderAddress) {
         this.UserID = UserID;
-        this.BookID = BookID;
+        this.TotalPrice = TotalPrice;
+        this.orderAddress = orderAddress;
     }
 
-    // Látogató rendelés
-    public Order(String ipAddress, int BookID, String Address, String CreditNumber, String Fullname) {
-        this.ipAddress = ipAddress;
-        this.BookID = BookID;
-        this.Address = Address;
-        this.CreditNumber = CreditNumber;
-        this.Fullname = Fullname;
-    }
-
-    public Order(int OrderID, int Discounted, String Fullname, String BookTitle){
+    // Konstruktor lekérdezéshez
+    public Order(int OrderID, int UserID, int OrderDate, int TotalPrice, String orderAddress) {
         this.OrderID = OrderID;
-        this.Fullname = Fullname;
-        this.Discounted = Discounted == 1 ? "Igen" : "Nem";
-        this.BookTitle = BookTitle;
+        this.UserID = UserID;
+        this.OrderDate = OrderDate;
+        this.TotalPrice = TotalPrice;
+        this.orderAddress = orderAddress;
     }
 
     // Getter - Setter
-
-
-    public String getDiscounted() {
-        return Discounted;
-    }
-
-    public void setDiscounted(String discounted) {
-        Discounted = discounted;
-    }
-
-    public String getBookTitle() {
-        return BookTitle;
-    }
-
-    public void setBookTitle(String bookTitle) {
-        BookTitle = bookTitle;
-    }
 
     public int getOrderID() {
         return OrderID;
@@ -58,6 +31,22 @@ public class Order {
 
     public void setOrderID(int orderID) {
         OrderID = orderID;
+    }
+
+    public int getTotalPrice() {
+        return TotalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        TotalPrice = totalPrice;
+    }
+
+    public int getOrderDate() {
+        return OrderDate;
+    }
+
+    public void setOrderDate(int orderDate) {
+        OrderDate = orderDate;
     }
 
     public int getUserID() {
@@ -68,43 +57,11 @@ public class Order {
         UserID = userID;
     }
 
-    public String getFullname() {
-        return Fullname;
+    public String getOrderAddress() {
+        return orderAddress;
     }
 
-    public void setFullname(String fullname) {
-        Fullname = fullname;
-    }
-
-    public String getCreditNumber() {
-        return CreditNumber;
-    }
-
-    public void setCreditNumber(String creditNumber) {
-        CreditNumber = creditNumber;
-    }
-
-    public String getAddress() {
-        return Address;
-    }
-
-    public void setAddress(String address) {
-        Address = address;
-    }
-
-    public int getBookID() {
-        return BookID;
-    }
-
-    public void setBookID(int bookID) {
-        BookID = bookID;
-    }
-
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setOrderAddress(String orderAddress) {
+        this.orderAddress = orderAddress;
     }
 }

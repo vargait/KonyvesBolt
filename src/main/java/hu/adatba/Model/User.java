@@ -4,14 +4,13 @@ public class User {
     // Adattagok
     private int UserID;
     private String Username;
-    private String Email;
     private String Password;
-    private boolean VIP;
+    private String Email;
     private String FullName;
+    private boolean VIP;
     private String PostalAddress;
     private String CreditNumber;
     private String Role;
-    private String ipAddress;
 
     // Konstruktor
     public User(String Username, String Email, String Password, int VIP, String FullName, String PostalAddress, String CreditNumber) {
@@ -24,88 +23,79 @@ public class User {
         this.CreditNumber = CreditNumber;
     }
 
-    public User(String ipAddress){
-        this.ipAddress = ipAddress;
-    }
+    // Látogató
+    public User(){}
 
     // Getter - Setter
     public int getUserID() {
         return UserID;
     }
 
-    public void setUserID(int UserID) {
-        this.UserID = UserID;
-    }
-
     public String getUsername() {
         return Username;
-    }
-
-    public void setUsername(String Username) {
-        this.Username = Username;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String Email) {
-        this.Email = Email;
     }
 
     public String getPassword() {
         return Password;
     }
 
-    public void setPassword(String Password) {
-        this.Password = Password;
-    }
-
-    public boolean isVIP() {
-        return VIP;
-    }
-
-    public void setVIP(boolean VIP) {
-        this.VIP = VIP;
+    public String getEmail() {
+        return Email;
     }
 
     public String getFullName() {
         return FullName;
     }
 
-    public void setFullName(String fullName) {
-        FullName = fullName;
+    public boolean isVIP() {
+        return VIP;
     }
 
     public String getPostalAddress() {
         return PostalAddress;
     }
 
-    public void setPostalAddress(String postalAddress) {
-        PostalAddress = postalAddress;
-    }
-
     public String getCreditNumber() {
         return CreditNumber;
-    }
-
-    public void setCreditNumber(String creditNumber) {
-        CreditNumber = creditNumber;
     }
 
     public String getRole() {
         return Role;
     }
 
-    public void setRole(String Role) {
-        this.Role = Role;
+    public void setUserID(int userID) {
+        UserID = userID;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
+    public void setUsername(String username) {
+        Username = username;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setPassword(String password) {
+        Password = password;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public void setFullName(String fullName) {
+        FullName = fullName;
+    }
+
+    public void setVIP(boolean VIP) {
+        this.VIP = VIP;
+    }
+
+    public void setPostalAddress(String postalAddress) {
+        PostalAddress = postalAddress;
+    }
+
+    public void setCreditNumber(String creditNumber) {
+        CreditNumber = creditNumber;
+    }
+
+    public void setRole(String role) {
+        Role = role;
     }
 }

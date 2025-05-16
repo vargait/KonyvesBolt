@@ -29,7 +29,7 @@ public class StatisticsController {
     private final OrderDAO orderDAO = new OrderDAO();
 
     public StatisticsController() throws SQLException {
-    }
+    }/*
 
     // Metódusok
     @FXML
@@ -77,5 +77,5 @@ public class StatisticsController {
 
     private void cancel() throws IOException {
         App.setRoot("list_books");
-    }
+    }*/
 }

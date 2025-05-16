@@ -18,7 +18,7 @@ public class OrderDAO {
 
     public OrderDAO() throws SQLException {
         this.conn = DBConnect.getConnection();
-    }
+    }/*
 
     // Rendelés hozzáadása DB-hez
     public boolean insertOrder(Order order) {
@@ -189,5 +189,5 @@ public class OrderDAO {
         }
         return orders;
     }
-
+*/
 }

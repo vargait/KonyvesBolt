@@ -1,12 +1,21 @@
 package hu.adatba.Model;
 
 public class Genre {
+    private int GenreID;
     private String GenreName;
     private String SubGenreName;
 
     public Genre(String genreName, String subGenreName) {
         GenreName = genreName;
         SubGenreName = subGenreName;
+    }
+
+    public int getGenreID() {
+        return GenreID;
+    }
+
+    public void setGenreID(int genreID) {
+        GenreID = genreID;
     }
 
     public String getGenreName() {

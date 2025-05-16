@@ -17,7 +17,7 @@ public class InvoiceDAO {
 
     public InvoiceDAO() throws SQLException {
         this.conn = DBConnect.getConnection();
-    }
+    }/*
 
     public Invoice getInvoice(ResultSet rs) throws SQLException {
         return new Invoice(
@@ -85,5 +85,5 @@ public class InvoiceDAO {
             }
         }
         return invoices;
-    }
+    }*/
 }

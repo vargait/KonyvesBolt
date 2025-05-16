@@ -18,8 +18,8 @@ public class BookService {
     }
 
     // Könyv hozzáadása
-    public boolean addBook(int PublicationYear, String Publisher, String Author, String Title, String Genre, String SubGenre, int Pages, int AvailableAmount, int Ebook, String Binding, int Price, String Size) throws SQLException {
-        Book book = new Book(PublicationYear, Publisher, Author, Title, Genre, SubGenre, Pages, AvailableAmount, Ebook, Binding, Price, Size);
+    public boolean addBook(int PublicationYear, String Publisher, String Author, String Title, int GenreID, int Pages, int Ebook, String Binding, int Price, String Size) throws SQLException {
+        Book book = new Book(PublicationYear, Publisher, Author, Title, GenreID, Pages, Ebook, Binding, Price, Size);
         if(bookDAO.findBookByAuthorAndTitle(Author, Title) == null) {
             return bookDAO.insertBook(book);
         }
@@ -59,15 +59,5 @@ public class BookService {
     // Akciós könyvek lekérdezése
     public List<Book> getDiscountedBooks(){
         return bookDAO.getDiscountedBooks();
-    }
-
-    // Műfaj lekérdezése
-    public List<String> getGenres(){
-        return bookDAO.getGenresFromDB();
-    }
-
-    // Alműfaj lekérdezése
-    public List<String> getSubGenres(String genre){
-        return bookDAO.getSubGenresFromDB(genre);
     }
 }

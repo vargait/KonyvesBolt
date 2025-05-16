@@ -34,7 +34,7 @@ public class OrderController {
     Book selectedBook;
 
     public OrderController() throws SQLException {
-    }
+    }/*
 
     // Metódusok
     @FXML
@@ -48,7 +48,6 @@ public class OrderController {
             addressTF.setText(user.getPostalAddress());
             creditnumberTF.setText(user.getCreditNumber());
             fullnameTF.setDisable(true);
-            addressTF.setDisable(true);
             creditnumberTF.setDisable(true);
         }
 
@@ -76,32 +75,25 @@ public class OrderController {
     }
 
     private void handleOrder() throws IOException {
-        if(user.getRole().equals("latogato")){
-            String fullname = fullnameTF.getText();
-            String address = addressTF.getText();
-            String creditnumber = creditnumberTF.getText();
+        String fullname = fullnameTF.getText();
+        String address = addressTF.getText();
+        String creditnumber = creditnumberTF.getText();
 
-            if(fullname.isEmpty() || address.isEmpty() || creditnumber.isEmpty()){
-                messageLabel.setText("Helytelen adatok!");
-                return;
-            }
+        if(fullname.isEmpty() || address.isEmpty() || creditnumber.isEmpty()){
+            messageLabel.setText("Helytelen adatok!");
+            return;
+        }
 
-            Order order = new Order(user.getIpAddress(), selectedBook.getBookID(), address, creditnumber, fullname);
-            if(orderService.addOrder(order)){
-                messageLabel.setText("Sikeres rendelés!");
-            }
-            else{
-                messageLabel.setText("Sikertelen rendelés!");
-            }
+        if(orderService.addOrder(new Order(user.getUserID(), totalPrice(), address))){
+            messageLabel.setText("Sikeres rendelés");
         }
         else{
-            if(orderService.addOrder(new Order(user.getUserID(), selectedBook.getBookID()))){
-                messageLabel.setText("Sikeres rendelés!");
-            }
-            else{
-                messageLabel.setText("Sikertelen rendelés!");
-            }
+            messageLabel.setText("Sikertelen rendelés!");
         }
     }
+
+    private int totalPrice() {
+        return 1;
+    }*/
 
 }

@@ -33,5 +33,23 @@ public class GenreService {
         return genreDAO.getAllGenres();
     }
 
+    // Műfaj lekérése Műfaj, Alműfaj alapján
+    public Genre getGenreByGenreAndSubgenre(String genre, String subgenre) throws SQLException {
+        return genreDAO.findGenreByGenreAndSubgenre(genre, subgenre);
+    }
 
+    // Műfaj lekérdezése ID alapján
+    public Genre getGenreByID(int genreID) throws SQLException {
+        return genreDAO.findGenreByID(genreID);
+    }
+
+    // Összes műfaj
+    public List<String> getGenres(){
+        return genreDAO.getGenresFromDB();
+    }
+
+    // Összes alműfaj
+    public List<String> getSubGenres(String genre){
+        return genreDAO.getSubGenresFromDB(genre);
+    }
 }

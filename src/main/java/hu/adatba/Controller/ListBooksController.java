@@ -5,6 +5,7 @@ import hu.adatba.Model.Book;
 import hu.adatba.Model.User;
 import hu.adatba.Service.BookService;
 import hu.adatba.Session;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -54,7 +55,7 @@ public class ListBooksController {
     private TableColumn<Book, String> listsizeTC;
 
     @FXML
-    private TableColumn<Book, String> listavailableamountTC;
+    private TableColumn<Book, String> listdiscountedTC;
 
     @FXML
     private TableColumn<Book, String> listpriceTC;
@@ -85,14 +86,18 @@ public class ListBooksController {
         listtitleTC.setCellValueFactory(new PropertyValueFactory<>("title"));
         listauthorTC.setCellValueFactory(new PropertyValueFactory<>("author"));
         listpublisherTC.setCellValueFactory(new PropertyValueFactory<>("publisher"));
-        listgenreTC.setCellValueFactory(new PropertyValueFactory<>("genre"));
-        listsubgenreTC.setCellValueFactory(new PropertyValueFactory<>("subGenre"));
+        listgenreTC.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getGenre().getGenreName())
+        );
+        listsubgenreTC.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getGenre().getSubGenreName())
+        );
         listpublishyearTC.setCellValueFactory(new PropertyValueFactory<>("publicationYear"));
         listpagesTC.setCellValueFactory(new PropertyValueFactory<>("pages"));
         listbindingTC.setCellValueFactory(new PropertyValueFactory<>("binding"));
         listebookTC.setCellValueFactory(new PropertyValueFactory<>("ebook"));
         listsizeTC.setCellValueFactory(new PropertyValueFactory<>("size"));
-        listavailableamountTC.setCellValueFactory(new PropertyValueFactory<>("availableAmount"));
+        listdiscountedTC.setCellValueFactory(new PropertyValueFactory<>("discounted"));
         listpriceTC.setCellValueFactory(new PropertyValueFactory<>("price"));
         addActionColumn();
 

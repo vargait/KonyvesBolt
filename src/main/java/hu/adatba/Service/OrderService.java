@@ -17,7 +17,7 @@ public class OrderService {
 
     public OrderService() throws SQLException {
         this.orderDAO = new OrderDAO();
-    }
+    }/*
 
     public boolean addOrder(Order order) {
         if(orderDAO.insertOrder(order)) {
@@ -29,5 +29,5 @@ public class OrderService {
     }
     public List<Order> getAllOrders(String type){
         return orderDAO.getAllBooks(type);
-    }
+    }*/
 }

@@ -50,8 +50,8 @@ public class GenreDAO {
         Genre genre = new Genre(
                 rs.getString("MUFAJNEV"),
                 rs.getString("ALMUFAJ")
-
         );
+        genre.setGenreID(rs.getInt("MUFAJID"));
         return genre;
     }
     // Összes műfaj lekérdezése
@@ -88,6 +88,53 @@ public class GenreDAO {
         return null;
     }
 
+    // Műfajok lekérdezése DB-ből
+    public List<String> getGenresFromDB() {
+        List<String> genres = new ArrayList<>();
+        String sql = "SELECT DISTINCT MUFAJNEV FROM MUFAJ ORDER BY MUFAJNEV";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                genres.add(rs.getString("MUFAJNEV"));
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Mufajok lekerdezese sikertelen.", e);
+        }
+        return genres;
+    }
 
+    // Alműfajok lekérdezése DB-ből
+    public List<String> getSubGenresFromDB(String genre) {
+        List<String> subgenres = new ArrayList<>();
+        String sql = "SELECT DISTINCT ALMUFAJ FROM MUFAJ WHERE MUFAJNEV = ? ORDER BY ALMUFAJ";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, genre);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                subgenres.add(rs.getString("ALMUFAJ"));
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Almufajok lekerdezese sikertelen.", e);
+        }
+        return subgenres;
+    }
+
+    // Lekérdezés ID alapján
+    public Genre findGenreByID(int genreID) {
+        String genre = "Ismeretlen";
+        String subgenre = "Ismeretlen";
+        String sql = "SELECT MUFAJNEV, ALMUFAJ FROM MUFAJ WHERE MUFAJID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, genreID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                genre = rs.getString("MUFAJNEV");
+                subgenre= rs.getString("ALMUFAJ");
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Almufajok lekerdezese sikertelen.", e);
+        }
+        return new Genre(genre, subgenre);
+    }
 }
 
