@@ -13,11 +13,6 @@ import java.util.logging.Logger;
 public class CartDAO {
     private static final Logger logger = Logger.getLogger(CartDAO.class.getName());
 
-    private final Connection conn;
-
-    public CartDAO() throws SQLException{
-        this.conn = DBConnect.getConnection();
-    }
     public Cart getCart(ResultSet rs) throws SQLException {
         Cart cart = new Cart(
                 rs.getInt("KOSARID"),
@@ -29,19 +24,22 @@ public class CartDAO {
 
     public boolean createCart(Cart cart){
         String sql = "INSERT INTO KOSAR (USERID, LETREHOZAS_EV) VALUES(?, ?, ?)";
-        try(PreparedStatement stmt = conn.prepareStatement(sql)){
-            stmt.setInt(1, cart.getUserID());
-            stmt.setInt(2, cart.getLetrehozas_ev());
+        try(Connection conn = DBConnect.getConnection()) {
+            assert conn != null;
+            try(PreparedStatement stmt = conn.prepareStatement(sql)){
+                stmt.setInt(1, cart.getUserID());
+                stmt.setInt(2, cart.getLetrehozas_ev());
 
-            int rowsAdded= stmt.executeUpdate();
-            if(rowsAdded > 0){
-                logger.log(Level.INFO, "Kosar hozzaadasa DB-hez sikeres.");
-                return true;
-            }else{
-                logger.log(Level.SEVERE, "Kosar hozzaadasa DB-hez sikertelen: lefutott, 0 sor hozzaadva");
-                return false;
+                int rowsAdded= stmt.executeUpdate();
+                if(rowsAdded > 0){
+                    logger.log(Level.INFO, "Kosar hozzaadasa DB-hez sikeres.");
+                    return true;
+                }else{
+                    logger.log(Level.SEVERE, "Kosar hozzaadasa DB-hez sikertelen: lefutott, 0 sor hozzaadva");
+                    return false;
+                }
             }
-        }catch(SQLException e){
+        } catch(SQLException e){
             logger.log(Level.SEVERE, "Kosar hozzaadasa a DBhez sikertelen: e");
 
         }

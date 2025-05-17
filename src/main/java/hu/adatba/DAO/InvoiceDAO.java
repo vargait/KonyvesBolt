@@ -11,13 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InvoiceDAO {
-    // Csatlakozás a DB-hez
-    private final Connection conn;
-
-    public InvoiceDAO() throws SQLException {
-        this.conn = DBConnect.getConnection();
-    }/*
+public class InvoiceDAO {/*
 
     public Invoice getInvoice(ResultSet rs) throws SQLException {
         return new Invoice(
