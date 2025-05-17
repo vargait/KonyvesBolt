@@ -4,6 +4,7 @@ import hu.adatba.DAO.CartDAO;
 import hu.adatba.Model.Cart;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +26,9 @@ public class CartService {
         return false;
     }
 
-   // public Cart getMyCart(int UserID){
 
-  //  }
+
+    public List<Cart> getMyCarts(int UserID){
+        return cartDAO.getMyCarts(UserID);
+    }
 }

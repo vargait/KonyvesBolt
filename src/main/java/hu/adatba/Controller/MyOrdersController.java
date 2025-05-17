@@ -18,14 +18,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyOrdersController {
 
     private final OrderService orderService = new OrderService();
     private final CartService cartService = new CartService();
-    private final CartDAO cartDAO = new CartDAO();
 
     @FXML
     TableView<Cart> myTV;
@@ -46,13 +47,12 @@ public class MyOrdersController {
 
     public void initialize() {
         //Saját Cartom listázása
-        myCartID.setCellValueFactory(new PropertyValueFactory<>("CartID"));
-        myUserID.setCellValueFactory(new PropertyValueFactory<>("UserID"));
+        myCartID.setCellValueFactory(new PropertyValueFactory<>("kosarID"));
+        myUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
         myDate.setCellValueFactory(new PropertyValueFactory<>("letrehozas_ev"));
-        Cart cart =cartDAO.findCartByUserID(Session.getUser().getUserID());
-        ObservableList<Cart> mycart = FXCollections.observableArrayList();
-        mycart.add(cart);
-        myTV.setItems(mycart);
+
+        List<Cart> carts = cartService.getMyCarts(Session.getUser().getUserID());
+        myTV.setItems(FXCollections.observableArrayList(carts));
 
 
         if(Session.getUser().getRole().equals("admin")) {
@@ -72,10 +72,11 @@ public class MyOrdersController {
 
     }
 
-
     private void switchToListBooks() throws IOException{
         App.setRoot("list_books");
     }
+
+
     private void gimmeCart(){
 
     }

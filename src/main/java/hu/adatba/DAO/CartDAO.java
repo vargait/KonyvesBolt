@@ -1,5 +1,6 @@
 package hu.adatba.DAO;
 
+import hu.adatba.Model.Book;
 import hu.adatba.Model.Cart;
 import hu.adatba.Model.User;
 import hu.adatba.db.DBConnect;
@@ -8,64 +9,91 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CartDAO {
     private static final Logger logger = Logger.getLogger(CartDAO.class.getName());
 
-    public Cart findCartByUserID(int UserID){
+
+
+    public List<Cart> getMyCarts(int userID) {
+        List<Cart> carts = new ArrayList<>();
         String sql = "SELECT * FROM KOSAR WHERE USERID = ?";
-        try(Connection conn = DBConnect.getConnection()){
-            assert conn!=null;
-            try(PreparedStatement stmt = conn.prepareStatement(sql)){
+
+        try (Connection conn = DBConnect.getConnection()) {
+            assert conn != null;
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, userID);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        carts.add(getCart(rs));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return carts;
+    }
+
+
+        public Cart getCart(ResultSet rs) throws SQLException{
+            Cart cart = new Cart(
+                    rs.getInt("USERID"),
+                    rs.getInt("LETREHOZAS_DATUMA")
+            );
+            cart.setKosarID(rs.getInt("KOSARID"));
+            return cart;
+        }
+
+    public Cart findCartByUserID(int UserID) {
+        String sql = "SELECT * FROM KOSAR WHERE USERID = ?";
+        try (Connection conn = DBConnect.getConnection()) {
+            assert conn != null;
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, UserID);
-                try(ResultSet rs = stmt.executeQuery()){
-                    if(rs.next()){
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
                         Cart cart = getCart(rs);
                         logger.log(Level.INFO, "Kosár lekérése sikeres");
                         return cart;
                     }
                 }
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, "Kosár lekérése sikertelen");
         }
         return null;
     }
 
-    public Cart getCart(ResultSet rs) throws SQLException {
-        Cart cart = new Cart(
-                rs.getInt("USERID"),
-                rs.getInt("LETREHOZAS_EV")
-        );
-        return cart;
-    }
 
-    public boolean createCart(Cart cart){
-        String sql = "INSERT INTO KOSAR (USERID, LETREHOZAS_EV) VALUES(?, ?, ?)";
-        try(Connection conn = DBConnect.getConnection()) {
+    public boolean createCart(Cart cart) {
+        String sql = "INSERT INTO KOSAR (USERID, LETREHOZAS_EV) VALUES(?, ?)";
+        try (Connection conn = DBConnect.getConnection()) {
             assert conn != null;
-            try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, cart.getUserID());
                 stmt.setInt(2, cart.getLetrehozas_ev());
 
-                int rowsAdded= stmt.executeUpdate();
-                if(rowsAdded > 0){
+                int rowsAdded = stmt.executeUpdate();
+                if (rowsAdded > 0) {
                     logger.log(Level.INFO, "Kosar hozzaadasa DB-hez sikeres.");
                     return true;
-                }else{
+                } else {
                     logger.log(Level.SEVERE, "Kosar hozzaadasa DB-hez sikertelen: lefutott, 0 sor hozzaadva");
                     return false;
                 }
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, "Kosar hozzaadasa a DBhez sikertelen: e");
 
         }
         return false;
     }
-
-
-
 }
+
+
