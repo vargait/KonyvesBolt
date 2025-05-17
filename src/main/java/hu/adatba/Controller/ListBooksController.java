@@ -64,7 +64,7 @@ public class ListBooksController {
     private Button editprofileBTN;
 
     @FXML
-    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, myordersBTN, invoicesBTN, discountedBTN;
+    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, myordersBTN, invoicesBTN, discountedBTN, switchToAddStoreBTN;
 
     @FXML
     private TextField searchTF;
@@ -134,6 +134,15 @@ public class ListBooksController {
                 throw new RuntimeException(ex);
             }
         });
+
+        switchToAddStoreBTN.setOnAction(e-> {
+        try {
+            switchToAddStores();
+        } catch (IOException exx) {
+            throw new RuntimeException(exx);
+        }
+    });
+
 
         searchBTN.setOnAction(e -> listBooksBySearch());
 
@@ -300,5 +309,8 @@ public class ListBooksController {
     }
     private void switchToMyOrders() throws IOException{
         App.setRoot("my_orders");
+    }
+    private void switchToAddStores() throws IOException{
+        App.setRoot("stores");
     }
 }

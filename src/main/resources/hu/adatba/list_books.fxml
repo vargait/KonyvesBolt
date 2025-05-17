@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
 
-<AnchorPane prefHeight="736.0" prefWidth="933.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.ListBooksController">
+<AnchorPane prefHeight="736.0" prefWidth="933.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.ListBooksController">
    <Button fx:id="myordersBTN" layoutX="203.0" layoutY="151.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Rendelések" visible="false" />
     <Button fx:id="invoicesBTN" layoutX="201.0" layoutY="115.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Számlák" visible="false" />
     <Button fx:id="addgenresBTN" layoutX="202.0" layoutY="80.0" mnemonicParsing="false" onAction="#switchToAddGenres" prefHeight="25.0" prefWidth="150.0" text="Műfajok felvitele" visible="false" />
@@ -34,4 +38,5 @@
    <Button fx:id="bestsellerBTN" layoutX="30.0" layoutY="115.0" mnemonicParsing="false" text="Bestsellerek" />
    <Button fx:id="statBTN" layoutX="30.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" text="Statisztikák" visible="false" />
    <Button fx:id="discountedBTN" layoutX="30.0" layoutY="151.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text="Akciós könyvek" />
+   <Button fx:id="switchToAddStoreBTN" layoutX="730.0" layoutY="21.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="121.0" text="Áruház hozzáadása" />
 </AnchorPane>
