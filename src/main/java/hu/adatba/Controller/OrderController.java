@@ -34,9 +34,19 @@ public class OrderController {
     Book selectedBook;
 
     public OrderController() throws SQLException {
-    }/*
+    }
 
     // Metódusok
+
+
+    @FXML
+    private void switchToListBooks() throws IOException {
+        Session.clearSelectedBook();
+        App.setRoot("list_books");
+    }
+
+
+    /*
     @FXML
     public void initialize() {
         user = Session.getUser();

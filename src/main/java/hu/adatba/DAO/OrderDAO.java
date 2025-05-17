@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 public class OrderDAO {
     private static final Logger logger = Logger.getLogger(OrderDAO.class.getName());/*
 
+
+
     // Rendelés hozzáadása DB-hez
     public boolean insertOrder(Order order) {
         String sql;

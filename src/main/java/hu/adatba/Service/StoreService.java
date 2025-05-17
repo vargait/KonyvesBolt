@@ -14,11 +14,9 @@ public class StoreService {
     private static final Logger logger = Logger.getLogger(StoreService.class.getName());
 
     private final StoreDAO storeDAO;
-    private final BookDAO bookDAO;
 
     public StoreService() throws SQLException{
         this.storeDAO = new StoreDAO();
-        this.bookDAO = new BookDAO();
     }
 
     public boolean addStore(String storeName, String storeAddress, String storePNumber, String email){

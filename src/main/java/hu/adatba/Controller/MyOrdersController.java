@@ -1,10 +1,15 @@
 package hu.adatba.Controller;
 
 import hu.adatba.App;
+import hu.adatba.DAO.CartDAO;
+import hu.adatba.Model.Cart;
 import hu.adatba.Model.Order;
+import hu.adatba.Service.CartService;
 import hu.adatba.Service.OrderService;
+import hu.adatba.Service.UserService;
 import hu.adatba.Session;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -19,21 +24,65 @@ import java.util.List;
 public class MyOrdersController {
 
     private final OrderService orderService = new OrderService();
+    private final CartService cartService = new CartService();
+    private final CartDAO cartDAO = new CartDAO();
 
     @FXML
-    TableView<Order> orderlistTV;
+    TableView<Cart> myTV;
 
     @FXML
-    TableColumn<Order, Integer> orderidTC, discountedTC, usernameTC, titleTC;
+    TableColumn<Cart, Integer> myCartID, myUserID, myDate;
 
     @FXML
     private ComboBox<String> queryCB;
 
     @FXML
-    private Button getbackBTN;
+    private Button getbackBTN, gimmeCartBTN;
 
     public MyOrdersController() throws SQLException {
-    }/*
+    }
+
+    //Metódusok
+
+    public void initialize() {
+        //Saját Cartom listázása
+        myCartID.setCellValueFactory(new PropertyValueFactory<>("CartID"));
+        myUserID.setCellValueFactory(new PropertyValueFactory<>("UserID"));
+        myDate.setCellValueFactory(new PropertyValueFactory<>("letrehozas_ev"));
+        Cart cart =cartDAO.findCartByUserID(Session.getUser().getUserID());
+        ObservableList<Cart> mycart = FXCollections.observableArrayList();
+        mycart.add(cart);
+        myTV.setItems(mycart);
+
+
+        if(Session.getUser().getRole().equals("admin")) {
+            queryCB.setVisible(true);
+        }
+
+        queryCB.getItems().addAll("Bejelentkezett felhasználók", "Vendég felhasználók");
+        queryCB.setValue("Bejelentkezett felhasználók");
+
+        getbackBTN.setOnAction(e -> {
+            try {
+                switchToListBooks();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+    }
+
+
+    private void switchToListBooks() throws IOException{
+        App.setRoot("list_books");
+    }
+    private void gimmeCart(){
+
+    }
+
+
+
+    /*
 
     public void initialize() {
         if(Session.getUser().getRole().equals("admin")) {

@@ -1,6 +1,7 @@
 package hu.adatba.DAO;
 
 import hu.adatba.Model.Cart;
+import hu.adatba.Model.User;
 import hu.adatba.db.DBConnect;
 
 import java.sql.Connection;
@@ -13,9 +14,28 @@ import java.util.logging.Logger;
 public class CartDAO {
     private static final Logger logger = Logger.getLogger(CartDAO.class.getName());
 
+    public Cart findCartByUserID(int UserID){
+        String sql = "SELECT * FROM KOSAR WHERE USERID = ?";
+        try(Connection conn = DBConnect.getConnection()){
+            assert conn!=null;
+            try(PreparedStatement stmt = conn.prepareStatement(sql)){
+                stmt.setInt(1, UserID);
+                try(ResultSet rs = stmt.executeQuery()){
+                    if(rs.next()){
+                        Cart cart = getCart(rs);
+                        logger.log(Level.INFO, "Kosár lekérése sikeres");
+                        return cart;
+                    }
+                }
+            }
+        }catch(SQLException e){
+            logger.log(Level.SEVERE, "Kosár lekérése sikertelen");
+        }
+        return null;
+    }
+
     public Cart getCart(ResultSet rs) throws SQLException {
         Cart cart = new Cart(
-                rs.getInt("KOSARID"),
                 rs.getInt("USERID"),
                 rs.getInt("LETREHOZAS_EV")
         );

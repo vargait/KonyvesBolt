@@ -7,8 +7,7 @@ public class Cart {
 
     public Cart(){}
 
-    public Cart(int kosarID, int userID, int letrehozas_ev) {
-        this.kosarID = kosarID;
+    public Cart(int userID, int letrehozas_ev) {
         this.userID = userID;
         this.letrehozas_ev = letrehozas_ev;
     }
