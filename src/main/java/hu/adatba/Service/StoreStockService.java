@@ -29,4 +29,8 @@ public class StoreStockService {
         return storeStockDAO.getAllStoreStocks();
     }
 
+    public StoreStock getStockByStoreAndBook(int StoreID, int BookID) throws SQLException {
+        return storeStockDAO.findStoreStockByBookIDAndStoreID(StoreID, BookID);
+    }
+
 }

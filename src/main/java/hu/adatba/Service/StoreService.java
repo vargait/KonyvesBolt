@@ -15,11 +15,11 @@ public class StoreService {
 
     private final StoreDAO storeDAO;
 
-    public StoreService() throws SQLException{
+    public StoreService() {
         this.storeDAO = new StoreDAO();
     }
 
-    public boolean addStore(String storeName, String storeAddress, String storePNumber, String email){
+    public boolean addStore(String storeName, String storeAddress, String storePNumber, String email) throws SQLException {
         Store store = new Store(storeName, storeAddress, storePNumber, email);
         if(storeDAO.findStoreByNameAndAddress(storeName, storeAddress) == null){
             return storeDAO.insertStore(store);
@@ -35,4 +35,7 @@ public class StoreService {
         return storeDAO.getAllStores();
     }
 
+    public List<Store> getStoresWithBook(int bookID) {
+        return storeDAO.getStoresWithBook(bookID);
+    }
 }

@@ -205,12 +205,12 @@ public class ListBooksController {
         if(!user.getRole().equals("admin")){
             listActionTC.setCellFactory(param -> new TableCell<>() {
 
-                private final Button orderBtn = new Button("Rendelés");
+                private final Button addtocartBtn = new Button("Kosárba");
                 {
-                    orderBtn.setOnAction(event -> {
+                    addtocartBtn.setOnAction(event -> {
                         Book book = getTableView().getItems().get(getIndex());
                         try {
-                            switchToOrder(book);
+                            switchToAddToCart(book);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -220,7 +220,7 @@ public class ListBooksController {
                 @Override
                 protected void updateItem(Void item, boolean empty) {
                     super.updateItem(item, empty);
-                    setGraphic(empty ? null : orderBtn);
+                    setGraphic(empty ? null : addtocartBtn);
                 }
             });
         }
@@ -279,9 +279,9 @@ public class ListBooksController {
         App.setRoot("statistics");
     }
 
-    private void switchToOrder(Book book) throws IOException {
+    private void switchToAddToCart(Book book) throws IOException {
         Session.setSelectedBook(book);
-        App.setRoot("order");
+        App.setRoot("add_to_cart");
     }
 
     private void switchToEdit(Book book) throws IOException {

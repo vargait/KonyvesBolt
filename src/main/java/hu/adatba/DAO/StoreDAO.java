@@ -109,5 +109,24 @@ public class StoreDAO {
     }
 
 
-
+    public List<Store> getStoresWithBook(int bookID) {
+        List<Store> stores = new ArrayList<>();
+        String sql = "SELECT * FROM ARUHAZ " +
+                "JOIN ARUHAZKESZLET ON ARUHAZ.ARUHAZID = ARUHAZKESZLET.ARUHAZID " +
+                "WHERE ARUHAZKESZLET.KONYVID = ? ORDER BY ARUHAZ.ARUHAZID";
+        try(Connection conn = DBConnect.getConnection()){
+            assert conn != null;
+            try(PreparedStatement stmt = conn.prepareStatement(sql)){
+                stmt.setInt(1, bookID);
+                try (ResultSet rs = stmt.executeQuery()){
+                    while(rs.next()){
+                        stores.add(getStore(rs));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return stores;
+    }
 }

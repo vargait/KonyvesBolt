@@ -94,6 +94,28 @@ public class CartDAO {
         }
         return false;
     }
+
+    public boolean insertBook(int CartID, int BookID, int Amount, int Price) throws SQLException {
+        String sql = "INSERT INTO KOSARTETEL VALUES(?, ?, ?, ?)";
+        try (Connection conn = DBConnect.getConnection()) {
+            assert conn != null;
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, CartID);
+                stmt.setInt(2, BookID);
+                stmt.setInt(3, Amount);
+                stmt.setInt(4, Price);
+
+                int rowsAdded = stmt.executeUpdate();
+                if (rowsAdded > 0) {
+                    logger.log(Level.INFO, "Konyv hozzaadasa kosarhoz sikeres");
+                    return true;
+                } else{
+                    logger.log(Level.SEVERE, ("Konyv hozzaadasa kosarhoz sikertelen"));
+                    return false;
+                }
+            }
+        }
+    }
 }
 
 

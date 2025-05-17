@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.AddToCartController">
+    <Text fx:id="selectedBookT" layoutX="31.0" layoutY="25.0" wrappingWidth="393.0" />
+    <TableView fx:id="liststoresTV" layoutX="14.0" layoutY="59.0" prefHeight="125.0" prefWidth="393.0" AnchorPane.bottomAnchor="216.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="193.0" AnchorPane.topAnchor="59.0">
+        <columns>
+            <TableColumn fx:id="listnameTC" text="Áruház" />
+            <TableColumn fx:id="listaddressTC" text="Cím" />
+            <TableColumn fx:id="listphoneTC" text="Telefonszám" />
+            <TableColumn fx:id="listemailTC" text="E-mail" />
+        </columns>
+    </TableView>
+   <Button fx:id="additemBTN" layoutX="139.0" layoutY="326.0" mnemonicParsing="false" text="Kosárba" />
+   <Button fx:id="cancelBTN" layoutX="233.0" layoutY="326.0" mnemonicParsing="false" text="Vissza" />
+   <Spinner fx:id="stockSP" layoutX="136.0" layoutY="263.0" />
+   <Text layoutX="136.0" layoutY="252.0" text="Darabszám" wrappingWidth="68.0" />
+    <Label fx:id="messageLabel" layoutX="155.0" layoutY="361.0" prefHeight="17.0" prefWidth="160.0" textFill="red" />
+   <Text fx:id="selectedStoreT" layoutX="136.0" layoutY="213.0" wrappingWidth="149.0" />
+   <Text fx:id="stockT" layoutX="146.0" layoutY="310.0" wrappingWidth="129.0" />
+</AnchorPane>

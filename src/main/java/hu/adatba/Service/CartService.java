@@ -31,4 +31,12 @@ public class CartService {
     public List<Cart> getMyCarts(int UserID){
         return cartDAO.getMyCarts(UserID);
     }
+
+    public boolean insertBook(int CartID, int UserID, int Amount, int Price) throws SQLException {
+        return cartDAO.insertBook(CartID, UserID, Amount, Price);
+    }
+
+    public Cart findCartByUserID(int UserID){
+        return cartDAO.findCartByUserID(UserID);
+    }
 }

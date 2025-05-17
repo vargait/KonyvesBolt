@@ -16,6 +16,14 @@ public class Store {
         this.email = email;
     }
 
+    public Store(Store store) {
+        this.StoreID = store.getStoreID();
+        this.StoreName = store.getStoreName();
+        this.StoreAddress = store.getStoreAddress();
+        this.StorePNumber = store.getStorePNumber();
+        this.email = store.getEmail();
+    }
+
     public int getStoreID() {
         return StoreID;
     }

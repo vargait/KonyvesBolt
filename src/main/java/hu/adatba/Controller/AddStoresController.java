@@ -133,6 +133,8 @@ public class AddStoresController {
             }
         }catch(RuntimeException e){
             messageLabel.setText("Sikertelen mentés!");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
     private void handleSaveStock() throws IOException{
