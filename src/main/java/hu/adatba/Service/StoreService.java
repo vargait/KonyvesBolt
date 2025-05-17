@@ -1,19 +1,24 @@
 package hu.adatba.Service;
 
+import hu.adatba.DAO.BookDAO;
 import hu.adatba.DAO.StoreDAO;
 import hu.adatba.Model.Store;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class StoreService {
     private static final Logger logger = Logger.getLogger(StoreService.class.getName());
 
     private final StoreDAO storeDAO;
+    private final BookDAO bookDAO;
 
     public StoreService() throws SQLException{
         this.storeDAO = new StoreDAO();
+        this.bookDAO = new BookDAO();
     }
 
     public boolean addStore(String storeName, String storeAddress, String storePNumber, String email){
@@ -23,6 +28,13 @@ public class StoreService {
         }
         logger.log(Level.INFO, "Az aruhaz mar letezik");
         return false;
+    }
+
+    public List<Integer> getStores(){
+        return storeDAO.getStoresFromDB();
+    }
+    public List<Store> getAllStores(){
+        return storeDAO.getAllStores();
     }
 
 }

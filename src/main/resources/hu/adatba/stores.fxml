@@ -2,31 +2,62 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.AddStoresController">
+<AnchorPane prefHeight="626.0" prefWidth="788.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.AddStoresController">
    <children>
-      <Button fx:id="getBackBTN" layoutX="324.0" layoutY="314.0" mnemonicParsing="false" text="Vissza" />
-      <Text layoutX="186.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruház név" />
-      <Text layoutX="186.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aruház Cím" />
-      <Text layoutX="140.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruház Telefonszám" />
-      <Text layoutX="180.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruház email" />
-      <Text layoutX="167.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruház hozzáadása" wrappingWidth="279.13671875">
+      <Button fx:id="getBackBTN" layoutX="363.0" layoutY="529.0" mnemonicParsing="false" text="Vissza" />
+      <Text layoutX="73.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruház név" />
+      <Text layoutX="73.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aruház Cím" />
+      <Text layoutX="27.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruház Telefonszám" />
+      <Text layoutX="67.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruház email" />
+      <Text layoutX="95.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruház hozzáadása" wrappingWidth="244.13671875">
 
 
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <Button fx:id="saveStoreBTN" layoutX="216.0" layoutY="314.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Hozzáadás" />
-      <TextField fx:id="storeNameTF" layoutX="274.0" layoutY="80.0" />
-      <TextField fx:id="storeAddressTF" layoutX="274.0" layoutY="113.0" />
-      <TextField fx:id="storePhoneTF" layoutX="274.0" layoutY="144.0" />
-      <TextField fx:id="storeEmailTF" layoutX="274.0" layoutY="179.0" />
+      <Button fx:id="saveStoreBTN" layoutX="176.0" layoutY="213.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Áruház hozzáadása" />
+      <TextField fx:id="storeNameTF" layoutX="161.0" layoutY="72.0" />
+      <TextField fx:id="storeAddressTF" layoutX="161.0" layoutY="105.0" />
+      <TextField fx:id="storePhoneTF" layoutX="161.0" layoutY="136.0" />
+      <TextField fx:id="storeEmailTF" layoutX="161.0" layoutY="169.0" />
       <Label fx:id="messageLabel" layoutX="265.0" layoutY="470.0" textFill="red" />
+      <Text layoutX="372.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruházkészlet hozzáadása" wrappingWidth="283.13671875">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Text layoutX="387.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruházazonosító" />
+      <Text layoutX="387.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Könyvazonosító" />
+      <Text layoutX="412.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Darab tétel" />
+      <Spinner fx:id="addstockstoreidSP" layoutX="505.0" layoutY="73.0" />
+      <Spinner fx:id="addstockbookidSP" layoutX="505.0" layoutY="106.0" />
+      <Spinner fx:id="addstockquantitySP" layoutX="505.0" layoutY="139.0" />
+      <Button fx:id="saveStockBTN" layoutX="505.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Készlet hozzáadása" />
+      <TableView fx:id="listStoreTV" layoutX="26.0" layoutY="261.0" prefHeight="243.0" prefWidth="366.0">
+        <columns>
+          <TableColumn fx:id="listStoreIDTC" prefWidth="49.0" text="ID" />
+          <TableColumn fx:id="listStoreNameTC" prefWidth="75.0" text="Nev" />
+            <TableColumn fx:id="listStoreAddressTC" prefWidth="77.0" text="Cim" />
+            <TableColumn fx:id="listStorePhoneTC" prefWidth="62.0" text="Tel" />
+            <TableColumn fx:id="listStoreEmailTC" prefWidth="102.0" text="Email" />
+        </columns>
+      </TableView>
+      <TableView fx:id="listStoreStockTV" layoutX="441.0" layoutY="261.0" prefHeight="243.0" prefWidth="304.0">
+        <columns>
+          <TableColumn fx:id="listStoreStockStoreIDTC" prefWidth="105.0" text="ÁruházID" />
+          <TableColumn fx:id="listStoreStockBookIDTC" prefWidth="93.0" text="KönyvID" />
+            <TableColumn fx:id="listStoreStockQuantityTC" prefWidth="105.0" text="Darab Raktáron" />
+        </columns>
+      </TableView>
 
    </children>
 </AnchorPane>

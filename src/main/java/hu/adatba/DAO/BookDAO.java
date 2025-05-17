@@ -223,4 +223,19 @@ public class BookDAO {
         */
         return books;
     }
+
+    //Könyv ID-jének lekérése az ÁruházKészlet hozzáadáshoz
+    public List<Integer> getBooksFromDB(){
+        List<Integer> books = new ArrayList<>();
+        String sql = "SELECT KONYVID FROM KONYV ORDER BY KONYVID";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                books.add(rs.getInt("KONYVID"));
+            }
+        }catch (SQLException err){
+            logger.log(Level.SEVERE, "Könyvek lekérdezése sikertelen.", err);
+        }
+        return books;
+    }
 }

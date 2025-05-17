@@ -5,7 +5,10 @@ import hu.adatba.db.DBConnect;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +21,33 @@ public class StoreStockDAO {
     public StoreStockDAO() throws SQLException {
         this.conn = DBConnect.getConnection();
     }
+    private StoreStock getStoreStock(ResultSet rs) throws SQLException{
+        StoreStock storeStock = new StoreStock(
+                rs.getInt("ARUHAZID"),
+                rs.getInt("KONYVID"),
+                rs.getInt("DARAB_RAKTARON")
+        );
+        return storeStock;
+    }
+
+    public StoreStock findStoreStockByBookIDAndStoreID(int StoreID, int BookID){
+        String sql = "SELECT * FROM ARUHAZKESZLET WHERE ARUHAZID = ? AND KONYVID = ?";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, StoreID);
+            stmt.setInt(2, BookID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    StoreStock storeStock = getStoreStock(rs);
+                    logger.log(Level.INFO, "AruházKészlet lekérése sikeres");
+                    return storeStock;
+                }
+            }
+
+        }catch(SQLException e){
+            logger.log(Level.SEVERE, "ÁruházKészlet lekérése sikertelen: ",e);
+        }
+        return null;
+    }
 
     public boolean insertStoreStock(StoreStock storeStock) {
         String sql = "INSERT INTO ARUHAZKESZLET (ARUHAZID, KONYVID, DARAB_RAKTARON) VALUES (?,?,?)";
@@ -27,17 +57,30 @@ public class StoreStockDAO {
             stmt.setInt(3, storeStock.getOnStock());
             int rowsAdded = stmt.executeUpdate();
             if (rowsAdded > 0) {
-                logger.log(Level.INFO, "ÁruházStock hozzáadása sikeres.");
+                logger.log(Level.INFO, "Aruhazkeszlet hozzáadása sikeres.");
                 return true;
             } else {
-                logger.log(Level.SEVERE, "ÁruházStock hozzáadása sikertelen, 0 sor hozzáadva");
+                logger.log(Level.SEVERE, "Aruhazkeszlet hozzáadása sikertelen, 0 sor hozzáadva");
                 return false;
             }
         } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "ÁruházStock hozzáadása a DB-hez sikertelen: ", ex);
+            logger.log(Level.SEVERE, "Aruhazkeszlet hozzáadása a DB-hez sikertelen: ", ex);
 
         }
         return false;
 
+    }
+
+    public List<StoreStock> getAllStoreStocks(){
+        List<StoreStock> storeStocks = new ArrayList<>();
+        String sql = "SELECT * FROM ARUHAZKESZLET ORDER BY ARUHAZID";
+        try(PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
+            while(rs.next()){
+                storeStocks.add(getStoreStock(rs));
+            }
+        }catch(SQLException err){
+            throw new RuntimeException(err);
+        }
+        return storeStocks;
     }
 }

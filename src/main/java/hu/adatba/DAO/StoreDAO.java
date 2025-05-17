@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,5 +75,34 @@ public class StoreDAO {
         }
         return null;
     }
+
+    public List<Integer> getStoresFromDB(){
+        List<Integer> stores = new ArrayList<>();
+        String sql = "SELECT DISTINCT ARUHAZID FROM ARUHAZ ORDER BY ARUHAZID";
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                stores.add(rs.getInt("ARUHAZID"));
+            }
+        }catch(SQLException e){
+            logger.log(Level.SEVERE, "Aruhazak lekerdezese sikertelen.", e);
+        }
+        return stores;
+    }
+
+    public List<Store> getAllStores(){
+        List<Store> stores = new ArrayList<>();
+        String sql = "SELECT * FROM ARUHAZ ORDER BY ARUHAZID";
+        try(PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
+            while (rs.next()){
+                stores.add(getStore(rs));
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }
+        return stores;
+    }
+
+
 
 }

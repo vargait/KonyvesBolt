@@ -60,4 +60,8 @@ public class BookService {
     public List<Book> getDiscountedBooks(){
         return bookDAO.getDiscountedBooks();
     }
+
+    public List<Integer> getBooks(){
+        return bookDAO.getBooksFromDB();
+    }
 }
