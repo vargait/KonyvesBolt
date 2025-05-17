@@ -29,7 +29,7 @@
       <TextField fx:id="storeAddressTF" layoutX="161.0" layoutY="105.0" />
       <TextField fx:id="storePhoneTF" layoutX="161.0" layoutY="136.0" />
       <TextField fx:id="storeEmailTF" layoutX="161.0" layoutY="169.0" />
-      <Label fx:id="messageLabel" layoutX="265.0" layoutY="470.0" textFill="red" />
+      <Label fx:id="messageLabel" layoutX="400.0" layoutY="600.0" textFill="red" />
       <Text layoutX="372.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Áruházkészlet hozzáadása" wrappingWidth="283.13671875">
          <font>
             <Font size="24.0" />
@@ -44,11 +44,11 @@
       <Button fx:id="saveStockBTN" layoutX="505.0" layoutY="200.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="Készlet hozzáadása" />
       <TableView fx:id="listStoreTV" layoutX="26.0" layoutY="261.0" prefHeight="243.0" prefWidth="366.0">
         <columns>
-          <TableColumn fx:id="listStoreIDTC" prefWidth="49.0" text="ID" />
-          <TableColumn fx:id="listStoreNameTC" prefWidth="75.0" text="Nev" />
-            <TableColumn fx:id="listStoreAddressTC" prefWidth="77.0" text="Cim" />
-            <TableColumn fx:id="listStorePhoneTC" prefWidth="62.0" text="Tel" />
-            <TableColumn fx:id="listStoreEmailTC" prefWidth="102.0" text="Email" />
+          <TableColumn fx:id="listStoreIDTC" prefWidth="39.0" text="ID" />
+          <TableColumn fx:id="listStoreNameTC" prefWidth="79.0" text="Nev" />
+            <TableColumn fx:id="listStoreAddressTC" prefWidth="72.0" text="Cim" />
+            <TableColumn fx:id="listStorePhoneTC" prefWidth="56.0" text="Tel" />
+            <TableColumn fx:id="listStoreEmailTC" prefWidth="119.0" text="Email" />
         </columns>
       </TableView>
       <TableView fx:id="listStoreStockTV" layoutX="441.0" layoutY="261.0" prefHeight="243.0" prefWidth="304.0">

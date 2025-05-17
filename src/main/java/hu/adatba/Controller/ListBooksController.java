@@ -110,6 +110,7 @@ public class ListBooksController {
                 addbooksBTN.setVisible(true);
                 addgenresBTN.setVisible(true);
                 statBTN.setVisible(true);
+                switchToAddStoreBTN.setVisible(true);
 
             }
             if(!user.getRole().equals("latogato")) {
