@@ -1,6 +1,7 @@
 package hu.adatba.Controller;
 
 import hu.adatba.App;
+import hu.adatba.DAO.OrderDAO;
 import hu.adatba.Model.*;
 import hu.adatba.Service.*;
 import hu.adatba.Session;
@@ -27,6 +28,7 @@ public class MyCartController {
     private final CartStockService cartStockService = new CartStockService();
     private final OrderService orderService = new OrderService();
     private  Cart usedCart;
+    private final OrderDAO orderDAO = new OrderDAO();
 
 
     @FXML
@@ -207,6 +209,7 @@ public class MyCartController {
             }
             if (orderService.addOrder(Session.getUser().getUserID(), 2025, sum, billing_Address, userName, card_Number)) {
                 messageLabel.setText("Sikeres rendeles!");
+                orderDAO.callCopyCartToOrder(usedCart.getKosarID());
                 if(Session.getUser().getRole().equals("felhasznalo")){
                     cartService.deleteCartByUserID(Session.getUser().getUserID());
                 } else if(Session.getUser().getRole().equals("latogato")){
