@@ -17,7 +17,16 @@ public class OrderService {
 
     public OrderService() throws SQLException {
         this.orderDAO = new OrderDAO();
-    }/*
+    }
+
+    public boolean addOrder(int UserID, int Order_Date, int End_Price, String Billing_address, String userName, String card_Number ){
+        Order order = new Order(UserID, Order_Date, End_Price, Billing_address, userName, card_Number);
+        return orderDAO.insertOrder(order);
+    }
+
+    /*
+
+
 
     public boolean addOrder(Order order) {
         if(orderDAO.insertOrder(order)) {

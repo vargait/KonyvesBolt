@@ -46,4 +46,7 @@ public class CartStock {
     public void setPrizeEach(int prizeEach) {
         PrizeEach = prizeEach;
     }
+    public int getOsszeg(){
+        return Quantity * PrizeEach;
+    }
 }

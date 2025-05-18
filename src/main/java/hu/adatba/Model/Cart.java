@@ -7,6 +7,10 @@ public class Cart {
 
     public Cart(){}
 
+    public Cart(int letrehozas_ev){
+        this.letrehozas_ev = letrehozas_ev;
+    }
+
     public Cart(int userID, int letrehozas_ev) {
         this.userID = userID;
         this.letrehozas_ev = letrehozas_ev;
@@ -35,5 +39,7 @@ public class Cart {
     public void setKosarID(int kosarID) {
         this.kosarID = kosarID;
     }
+
+
 
 }

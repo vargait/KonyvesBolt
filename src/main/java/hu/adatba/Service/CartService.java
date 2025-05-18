@@ -16,6 +16,16 @@ public class CartService {
     public CartService() throws SQLException{
         this.cartDAO = new CartDAO();
     }
+    public boolean addGuestCart(){
+        if(cartDAO.createGuestCart()){
+            logger.log(Level.INFO,"VendégKosár létrejött");
+            return true;
+        }
+        else{
+            logger.log(Level.SEVERE,"Vendégkosár már létezik/nem tudott létrejönni");
+            return false;
+        }
+    }
 
     public boolean addCart(int UserID, int letrehozas_ev){
         Cart cart = new Cart(UserID,letrehozas_ev);

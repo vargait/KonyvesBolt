@@ -3,6 +3,7 @@ package hu.adatba.DAO;
 import hu.adatba.Model.Book;
 import hu.adatba.Model.Cart;
 import hu.adatba.Model.User;
+import hu.adatba.Service.CartService;
 import hu.adatba.db.DBConnect;
 
 import java.sql.Connection;
@@ -69,6 +70,31 @@ public class CartDAO {
         return null;
     }
 
+
+    public boolean createGuestCart(){
+        if(findCartByUserID(5000) == null){
+            String sql = "INSERT INTO KOSAR (USERID, LETREHOZAS_DATUMA) VALUES(0, 2025)";
+            try(Connection conn = DBConnect.getConnection()){
+                assert conn!= null;
+                try(PreparedStatement stmt = conn.prepareStatement(sql)){
+                    int rowsAdded = stmt.executeUpdate();
+                    if(rowsAdded>0){
+                        logger.log(Level.INFO, "Vendegkosar hozzaadasa DB-hez sikeres.");
+                        return true;
+                    }else{
+                        logger.log(Level.SEVERE,"Vendegkosar hozzaadasa sikertelen!");
+                        return false;
+                    }
+                }
+
+            } catch (SQLException e){
+                logger.log(Level.SEVERE, "A vendegkosar hozzaadasa a DBhez sikertelen: ",e);
+            }
+        }else{
+            return false;
+        }
+        return false;
+    }
 
     public boolean createCart(Cart cart) {
         String sql = "INSERT INTO KOSAR (USERID, LETREHOZAS_DATUMA) VALUES(?, ?)";

@@ -1,10 +1,7 @@
 package hu.adatba.Controller;
 
 import hu.adatba.App;
-import hu.adatba.Model.Book;
-import hu.adatba.Model.Cart;
-import hu.adatba.Model.MyCartItem;
-import hu.adatba.Model.Store;
+import hu.adatba.Model.*;
 import hu.adatba.Service.*;
 import hu.adatba.Session;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -14,7 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-
+import javafx.scene.control.TableView;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,13 +23,20 @@ public class MyCartController {
 
     private final CartService cartService = new CartService();
     private final CartStockService cartStockService = new CartStockService();
+    private final OrderService orderService = new OrderService();
     private  Cart usedCart;
+
+
+    @FXML
+    private Label messageLabel;
     @FXML
     TableView<Cart> myTV;
 
     @FXML
     TableColumn<Cart, Integer> myCartID, myUserID, myDate;
 
+    @FXML
+    TextField billingAddressTF, userNameTF, cardNumberTF;
     @FXML
     TableView<MyCartItem> myStockTV;
     @FXML
@@ -43,11 +47,10 @@ public class MyCartController {
     private static final Logger logger = Logger.getLogger(MyCartController.class.getName());
 
     @FXML
-    private Button getbackBTN;
+    private Button getbackBTN, handleOrderBTN;
 
     public MyCartController() throws SQLException {
     }
-
     //Metódusok
 
     public void initialize() {
@@ -91,6 +94,13 @@ public class MyCartController {
         getbackBTN.setOnAction(e -> {
             try {
                 switchToListBooks();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        handleOrderBTN.setOnAction(e -> {
+            try {
+                handleRendeles();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -163,7 +173,30 @@ public class MyCartController {
         App.setRoot("list_books");
     }
 
+    private void handleRendeles() throws IOException {
+        try {
+            int sum = 0;
+            for (int i = 0; i < myStockTV.getItems().size(); i++) {
+                sum += myStockTV.getItems().get(i).getTotalPrice();
+            }
+            String billing_Address = billingAddressTF.getText().trim();
+            String userName = userNameTF.getText().trim();
+            String card_Number = cardNumberTF.getText().trim();
 
+            //Üres input kezelés
+            if (billing_Address.isEmpty() || userName.isEmpty() || card_Number.isEmpty()) {
+                messageLabel.setText("Helytelen adatok!");
+                return;
+            }
+            if (orderService.addOrder(Session.getUser().getUserID(), 2025, sum, billing_Address, userName, card_Number)) {
+                messageLabel.setText("Sikeres rendeles!");
+            } else {
+                messageLabel.setText("Sikertelen rendeles!");
+            }
+        }catch(RuntimeException e){
+            messageLabel.setText("Sikertelen rendeles! sql/runtim");
+        }
+    }
 
     /*
 

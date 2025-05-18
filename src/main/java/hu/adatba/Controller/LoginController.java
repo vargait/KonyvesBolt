@@ -65,6 +65,7 @@ public class LoginController {
         guestloginBTN.setOnAction(e -> {
             try {
                 handleGuestLogin();
+
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -89,6 +90,8 @@ public class LoginController {
     private void handleGuestLogin() throws IOException{
         User user = userService.loginAsGuest();
         Session.setUser(user);
+        cartService.deleteCartByUserID(0);
+        cartService.addGuestCart();
         messageLabel.setText("Sikeres bejelentkezés!");
         App.setRoot("list_books");
     }
