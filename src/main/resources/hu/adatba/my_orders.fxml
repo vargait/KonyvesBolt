@@ -9,7 +9,7 @@
 <AnchorPane prefHeight="400.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.MyOrdersController">
    <children>
        <ComboBox fx:id="queryCB" layoutX="171.0" layoutY="14.0" prefHeight="25.0" prefWidth="258.0" visible="false" />
-      <TableView fx:id="cartStockTV" layoutX="551.0" layoutY="61.0" prefHeight="316.0" prefWidth="321.0">
+      <TableView fx:id="myStockTV" layoutX="551.0" layoutY="61.0" prefHeight="316.0" prefWidth="321.0">
         <columns>
           <TableColumn fx:id="cartStockCartIDTC" prefWidth="75.0" text="KOSARID" />
             <TableColumn fx:id="cartStockBookIDTC" prefWidth="75.0" text="KONYVID" />

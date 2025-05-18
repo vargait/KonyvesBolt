@@ -3,8 +3,10 @@ package hu.adatba.Controller;
 import hu.adatba.App;
 import hu.adatba.DAO.CartDAO;
 import hu.adatba.Model.Cart;
+import hu.adatba.Model.CartStock;
 import hu.adatba.Model.Order;
 import hu.adatba.Service.CartService;
+import hu.adatba.Service.CartStockService;
 import hu.adatba.Service.OrderService;
 import hu.adatba.Service.UserService;
 import hu.adatba.Session;
@@ -27,13 +29,18 @@ public class MyOrdersController {
 
     private final OrderService orderService = new OrderService();
     private final CartService cartService = new CartService();
-
+    private final CartStockService cartStockService = new CartStockService();
+    private  Cart usedCart;
     @FXML
     TableView<Cart> myTV;
 
     @FXML
     TableColumn<Cart, Integer> myCartID, myUserID, myDate;
 
+    @FXML
+    TableView<CartStock> myStockTV;
+    @FXML
+    TableColumn<CartStock, Integer> cartStockCartIDTC, cartStockBookIDTC, cartStockQuantityTC, cartStockprizeTC;
     @FXML
     private ComboBox<String> queryCB;
 
@@ -55,6 +62,19 @@ public class MyOrdersController {
         myTV.setItems(FXCollections.observableArrayList(carts));
 
 
+
+        //Saját CartStockjaim listázása
+        usedCart = cartService.findCartByUserID(Session.getUser().getUserID());
+        int myCartID = usedCart.getKosarID();
+        cartStockCartIDTC.setCellValueFactory(new PropertyValueFactory<>("CartID"));
+        cartStockBookIDTC.setCellValueFactory(new PropertyValueFactory<>("BookID"));
+        cartStockQuantityTC.setCellValueFactory(new PropertyValueFactory<>("Quantity"));
+        cartStockprizeTC.setCellValueFactory(new PropertyValueFactory<>("PrizeEach"));
+
+        List<CartStock> cartStocks = cartStockService.getMyCartStocks(myCartID);
+        myStockTV.setItems(FXCollections.observableArrayList(cartStocks));
+
+
         if(Session.getUser().getRole().equals("admin")) {
             queryCB.setVisible(true);
         }
@@ -74,11 +94,6 @@ public class MyOrdersController {
 
     private void switchToListBooks() throws IOException{
         App.setRoot("list_books");
-    }
-
-
-    private void gimmeCart(){
-
     }
 
 

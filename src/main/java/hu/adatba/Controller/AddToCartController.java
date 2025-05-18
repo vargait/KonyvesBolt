@@ -1,11 +1,9 @@
 package hu.adatba.Controller;
 
 import hu.adatba.App;
-import hu.adatba.Model.Book;
-import hu.adatba.Model.Cart;
-import hu.adatba.Model.Store;
-import hu.adatba.Model.User;
+import hu.adatba.Model.*;
 import hu.adatba.Service.CartService;
+import hu.adatba.Service.CartStockService;
 import hu.adatba.Service.StoreService;
 import hu.adatba.Service.StoreStockService;
 import hu.adatba.Session;
@@ -43,9 +41,11 @@ public class AddToCartController {
 
     private final StoreService storeService = new StoreService();
     private final StoreStockService storeStockService = new StoreStockService();
+    private final CartService cartService = new CartService();
     private User user;
     private Book selectedBook;
     private Store selectedStore;
+    private Cart usedCart;
 
 
     public AddToCartController() throws SQLException {
@@ -57,6 +57,7 @@ public class AddToCartController {
         user = Session.getUser();
         selectedBook = Session.getSelectedBook();
         selectedBookT.setText(selectedBook.getAuthor() + " - " + selectedBook.getTitle() + " készlet:");
+        usedCart = cartService.findCartByUserID(user.getUserID());
 
         listnameTC.setCellValueFactory(new PropertyValueFactory<>("storeName"));
         listaddressTC.setCellValueFactory(new PropertyValueFactory<>("storeAddress"));
@@ -81,7 +82,7 @@ public class AddToCartController {
 
         additemBTN.setOnAction(e -> {
             try {
-                putItemToCart();
+                putItemtoCartStock();
             } catch (IOException | SQLException ex) {
                 throw new RuntimeException(ex);
             }
@@ -133,10 +134,25 @@ public class AddToCartController {
         App.setRoot("list_books");
     }
 
+    private void putItemtoCartStock() throws IOException, SQLException{
+        CartStockService cartStockService = new CartStockService();
+        CartStock cartStock = cartStockService.findCartStockByCartIDAndBookID(usedCart.getKosarID(), selectedBook.getBookID());
+        if(selectedStore != null || cartStock != null){
+            if(cartStockService.addCartStock(usedCart.getKosarID(),selectedBook.getBookID(), stockSP.getValue(), selectedBook.getPrice())){
+                messageLabel.setText("Sikeres kosárba rakás!");
+            }else {
+                messageLabel.setText("Hozzáadás sikertelen");
+            }
+        }
+        else{
+            messageLabel.setText("Válasszon ki egy áruházat!");
+        }
+    }
+
+/*
     private void putItemToCart() throws IOException, SQLException {
         CartService cartService = new CartService();
         Cart cart = cartService.findCartByUserID(user.getUserID());
-
         if(selectedStore != null || cart != null) {
             if(cartService.insertBook(cart.getKosarID(), user.getUserID(), stockSP.getValue(), selectedBook.getPrice())){
                 messageLabel.setText("Sikeres hozzáadás");
@@ -149,4 +165,6 @@ public class AddToCartController {
             messageLabel.setText("Válasszon ki egy áruházat!");
         }
     }
+
+ */
 }
