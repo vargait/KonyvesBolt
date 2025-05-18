@@ -3,8 +3,6 @@ package hu.adatba.DAO;
 import hu.adatba.Model.Genre;
 import hu.adatba.db.DBConnect;
 
-import hu.adatba.db.DBConnect;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -213,34 +213,6 @@ public class BookDAO {
         return discountedBooks;
     }
 
-    // Legtöbbször rendelt könyvek (TOP 3) - Összetett lekérdezés
-    public List<Book> getBestsellers(){
-        List<Book> books = new ArrayList<>();
-        /*
-
-        String sql = "SELECT k.* FROM KONYV k " +
-                "JOIN ( " +
-                "    SELECT rf.KONYVID, COUNT(*) AS RENDELES_SZAM " +
-                "    FROM RENDELES_F rf " +
-                "    JOIN KONYV k2 ON rf.KONYVID = k2.KONYVID " +
-                "    GROUP BY rf.KONYVID " +
-                "    ORDER BY COUNT(*) DESC " +
-                "    FETCH FIRST 3 ROWS ONLY " +
-                ") top_books ON k.KONYVID = top_books.KONYVID " +
-                "ORDER BY top_books.RENDELES_SZAM DESC";
-        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
-            while (rs.next()) {
-                books.add(getBook(rs));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return books;
-
-        */
-        return books;
-    }
-
     //Könyv ID-jének lekérése az ÁruházKészlet hozzáadáshoz
     public List<Integer> getBooksFromDB(){
         List<Integer> books = new ArrayList<>();

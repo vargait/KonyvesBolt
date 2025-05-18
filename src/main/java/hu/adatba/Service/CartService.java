@@ -13,27 +13,25 @@ public class CartService {
 
     private final CartDAO cartDAO;
 
-    public CartService() throws SQLException{
+    public CartService() {
         this.cartDAO = new CartDAO();
     }
-    public boolean addGuestCart(){
+    public void addGuestCart(){
         if(cartDAO.createGuestCart()){
             logger.log(Level.INFO,"VendégKosár létrejött");
-            return true;
         }
         else{
             logger.log(Level.SEVERE,"Vendégkosár már létezik/nem tudott létrejönni");
-            return false;
         }
     }
 
-    public boolean addCart(int UserID, int letrehozas_ev){
-        Cart cart = new Cart(UserID,letrehozas_ev);
+    public void addCart(int UserID){
+        Cart cart = new Cart(UserID);
         if(cartDAO.findCartByUserID(UserID)== null){
-            return cartDAO.createCart(cart);
+            cartDAO.createCart(cart);
+            return;
         }
         logger.log(Level.INFO,"A Kosár már létezik");
-        return false;
     }
 
 

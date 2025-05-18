@@ -16,12 +16,11 @@ public class StoreStockDAO {
     private static final Logger logger = Logger.getLogger(StoreStockDAO.class.getName());
 
     private StoreStock getStoreStock(ResultSet rs) throws SQLException{
-        StoreStock storeStock = new StoreStock(
+        return new StoreStock(
                 rs.getInt("ARUHAZID"),
                 rs.getInt("KONYVID"),
                 rs.getInt("DARAB_RAKTARON")
         );
-        return storeStock;
     }
 
     public StoreStock findStoreStockByBookIDAndStoreID(int StoreID, int BookID){

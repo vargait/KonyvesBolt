@@ -1,7 +1,6 @@
 package hu.adatba.Controller;
 
 import hu.adatba.App;
-import hu.adatba.Model.Book;
 import hu.adatba.Model.Store;
 import hu.adatba.Model.StoreStock;
 import hu.adatba.Service.BookService;

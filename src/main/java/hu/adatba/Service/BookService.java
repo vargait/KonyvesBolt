@@ -13,7 +13,7 @@ public class BookService {
 
     private final BookDAO bookDAO;
 
-    public BookService() throws SQLException {
+    public BookService() {
         this.bookDAO = new BookDAO();
     }
 
@@ -49,11 +49,6 @@ public class BookService {
     // Könyvek lekérdezése kulcsszó alapján
     public List<Book> getBooksByKeyword(String keyword) {
         return bookDAO.getBooksByKeyword(keyword);
-    }
-
-    // Bestsellerek lekérdezése
-    public List<Book> getBestsellers(){
-        return bookDAO.getBestsellers();
     }
 
     // Akciós könyvek lekérdezése

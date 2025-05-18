@@ -64,7 +64,7 @@ public class ListBooksController {
     private Button editprofileBTN;
 
     @FXML
-    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, mycartBTN, invoicesBTN, discountedBTN, switchToAddStoreBTN;
+    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, statBTN, mycartBTN, invoicesBTN, discountedBTN, switchToAddStoreBTN;
 
     @FXML
     private TextField searchTF;
@@ -76,7 +76,7 @@ public class ListBooksController {
     private final User user;
     private static final Logger logger = Logger.getLogger(ListBooksController.class.getName());
 
-    public ListBooksController() throws SQLException {
+    public ListBooksController() {
         user = Session.getUser();
     }
 
@@ -111,13 +111,9 @@ public class ListBooksController {
                 addgenresBTN.setVisible(true);
                 statBTN.setVisible(true);
                 switchToAddStoreBTN.setVisible(true);
-                invoicesBTN.setVisible(false);
             }
-            if(!user.getRole().equals("latogato")) {
-                editprofileBTN.setVisible(true);
-                mycartBTN.setVisible(true);
-            }else{
-                invoicesBTN.setVisible(false);
+            else if(user.getRole().equals("felhasznalo")) {
+                invoicesBTN.setVisible(true);
             }
         }
 
@@ -147,8 +143,6 @@ public class ListBooksController {
 
 
         searchBTN.setOnAction(e -> listBooksBySearch());
-
-        bestsellerBTN.setOnAction(e -> listBestsellers());
 
         discountedBTN.setOnAction(e -> listDiscountedBooks());
 
@@ -181,14 +175,6 @@ public class ListBooksController {
             books = bookService.getAllBooks();
         }
         resultcountT.setText(books.size() + " találat");
-        listbooksTV.setItems(FXCollections.observableArrayList(books));
-    }
-
-    // Bestsellerek keresése
-    private void listBestsellers(){
-        listbooksTV.getItems().clear();
-        List<Book> books = bookService.getBestsellers();
-        resultcountT.setText("Top 3 könyv");
         listbooksTV.setItems(FXCollections.observableArrayList(books));
     }
 

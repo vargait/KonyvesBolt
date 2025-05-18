@@ -23,6 +23,14 @@ public class Order {
         this.Card_Number = card_Number;
     }
 
+    public Order(int userID, int end_Price, String billing_address, String userName, String card_Number) {
+        UserID = userID;
+        End_Price = end_Price;
+        this.Billing_address = billing_address;
+        this.UserName = userName;
+        this.Card_Number = card_Number;
+    }
+
     public String getUserName() {
         return UserName;
     }

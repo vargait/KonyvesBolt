@@ -1,7 +1,6 @@
 package hu.adatba.Service;
 
 import hu.adatba.DAO.GenreDAO;
-import hu.adatba.Model.Book;
 import hu.adatba.Model.Genre;
 
 import java.sql.SQLException;
@@ -14,7 +13,7 @@ public class GenreService {
 
     private final GenreDAO genreDAO;
 
-    public GenreService() throws SQLException {
+    public GenreService() {
         this.genreDAO = new GenreDAO();
     }
 
@@ -39,7 +38,7 @@ public class GenreService {
     }
 
     // Műfaj lekérdezése ID alapján
-    public Genre getGenreByID(int genreID) throws SQLException {
+    public Genre getGenreByID(int genreID) {
         return genreDAO.findGenreByID(genreID);
     }
 

@@ -13,7 +13,7 @@ public class StoreStockService {
 
     private final StoreStockDAO storeStockDAO;
 
-    public StoreStockService() throws SQLException {
+    public StoreStockService() {
         this.storeStockDAO = new StoreStockDAO();
     }
 
@@ -33,7 +33,7 @@ public class StoreStockService {
         return storeStockDAO.findStoreStockByBookIDAndStoreID(StoreID, BookID);
     }
 
-    public boolean updateStock(int newStock, int StoreID, int BookID) throws SQLException {
+    public boolean updateStock(int newStock, int StoreID, int BookID) {
         return storeStockDAO.updateStock(newStock, StoreID, BookID);
     }
 }

@@ -1,11 +1,7 @@
 package hu.adatba.Controller;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import hu.adatba.App;
 import hu.adatba.Model.User;
@@ -40,7 +36,6 @@ public class LoginController {
 
     private final UserService userService = new UserService();
     private final CartService cartService = new CartService();
-    private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 
     public LoginController() throws SQLException {
     }
@@ -79,6 +74,7 @@ public class LoginController {
         User user = userService.loginUser(username, password);
         if (user != null) {
             Session.setUser(user);
+            cartService.deleteCartByUserID(Session.getUser().getUserID());
             messageLabel.setText("Sikeres bejelentkezés!");
             App.setRoot("list_books");
         } else {

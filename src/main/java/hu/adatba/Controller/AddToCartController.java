@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AddToCartController {
     // Adattagok
@@ -44,14 +42,10 @@ public class AddToCartController {
     private final StoreService storeService = new StoreService();
     private final StoreStockService storeStockService = new StoreStockService();
     private final CartService cartService = new CartService();
-    private User user;
     private Book selectedBook;
     private Store selectedStore;
     private Cart usedCart;
     private int selectedStock;
-
-    private static final Logger logger = Logger.getLogger(AddToCartController.class.getName());
-
 
     public AddToCartController() throws SQLException {
     }
@@ -59,9 +53,9 @@ public class AddToCartController {
     // Metódusok
     @FXML
     public void initialize() {
-        user = Session.getUser();
+        User user = Session.getUser();
         if(user.getRole().equals("felhasznalo")) {
-            cartService.addCart(Session.getUser().getUserID(), 2025);
+            cartService.addCart(Session.getUser().getUserID());
         } else if(user.getRole().equals("latogato")) {
             cartService.addGuestCart();
         }
@@ -152,12 +146,6 @@ public class AddToCartController {
         if(selectedStore != null || cartStock != null){
             if(cartStockService.addCartStock(usedCart.getKosarID(),selectedBook.getBookID(), stockSP.getValue(), selectedBook.getPrice())){
                 messageLabel.setText("Sikeres kosárba rakás!");
-                int newStock = selectedStock - stockSP.getValue();
-                if(storeStockService.updateStock(newStock, selectedStore.getStoreID(), selectedBook.getBookID())){
-                    logger.log(Level.INFO, "Készlet változtatása sikeres");
-                } else{
-                    logger.log(Level.SEVERE, "Készlet változtatása sikertelen");
-                }
             }else {
                 messageLabel.setText("Hozzáadás sikertelen");
             }
@@ -166,23 +154,4 @@ public class AddToCartController {
             messageLabel.setText("Válasszon ki egy áruházat!");
         }
     }
-
-/*
-    private void putItemToCart() throws IOException, SQLException {
-        CartService cartService = new CartService();
-        Cart cart = cartService.findCartByUserID(user.getUserID());
-        if(selectedStore != null || cart != null) {
-            if(cartService.insertBook(cart.getKosarID(), user.getUserID(), stockSP.getValue(), selectedBook.getPrice())){
-                messageLabel.setText("Sikeres hozzáadás");
-            }
-            else{
-                messageLabel.setText("Hozzáadás sikertelen.");
-            }
-        }
-        else{
-            messageLabel.setText("Válasszon ki egy áruházat!");
-        }
-    }
-
- */
 }

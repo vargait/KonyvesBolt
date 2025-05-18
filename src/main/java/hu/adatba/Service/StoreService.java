@@ -1,6 +1,5 @@
 package hu.adatba.Service;
 
-import hu.adatba.DAO.BookDAO;
 import hu.adatba.DAO.StoreDAO;
 import hu.adatba.Model.Store;
 

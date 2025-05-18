@@ -8,7 +8,6 @@ import hu.adatba.Session;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,7 +16,6 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -207,7 +205,7 @@ public class MyCartController {
                 messageLabel.setText("Helytelen adatok!");
                 return;
             }
-            if (orderService.addOrder(Session.getUser().getUserID(), 2025, sum, billing_Address, userName, card_Number)) {
+            if (orderService.addOrder(Session.getUser().getUserID(), sum, billing_Address, userName, card_Number)) {
                 messageLabel.setText("Sikeres rendeles!");
                 orderDAO.callCopyCartToOrder(usedCart.getKosarID());
                 if(Session.getUser().getRole().equals("felhasznalo")){
@@ -224,55 +222,4 @@ public class MyCartController {
             logger.log(Level.SEVERE, e.getMessage());
         }
     }
-
-    /*
-
-    public void initialize() {
-        if(Session.getUser().getRole().equals("admin")) {
-            queryCB.setVisible(true);
-        }
-
-        queryCB.getItems().addAll("Bejelentkezett felhasználók", "Vendég felhasználók");
-        queryCB.setValue("Bejelentkezett felhasználók");
-
-        orderidTC.setCellValueFactory(new PropertyValueFactory<>("OrderID"));
-        discountedTC.setCellValueFactory(new PropertyValueFactory<>("discounted"));
-        usernameTC.setCellValueFactory(new PropertyValueFactory<>("fullname"));
-        titleTC.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
-
-        queryCB.setOnAction(e -> myOrdersToTable());
-
-        myOrdersToTable();
-
-
-        getbackBTN.setOnAction(e -> {
-            try {
-                switchToListBooks();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-    }
-
-    @FXML
-    private void myOrdersToTable(){
-        String selectedQuery = queryCB.getValue();
-        List<Order> orders = orderService.getAllOrders("felhasznalo");
-
-
-        switch (selectedQuery) {
-            case "Bejelentkezett felhasználók": orders = orderService.getAllOrders("felhasznalo"); break;
-            case "Vendég felhasználók": orders = orderService.getAllOrders("latogato"); break;
-        }
-
-
-        orderlistTV.setItems(FXCollections.observableArrayList(orders));
-
-    }
-
-    private void switchToListBooks() throws IOException{
-        App.setRoot("list_books");
-    }
-*/
 }

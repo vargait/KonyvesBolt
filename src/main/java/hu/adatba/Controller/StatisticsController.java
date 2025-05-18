@@ -1,7 +1,7 @@
 package hu.adatba.Controller;
 
 import hu.adatba.App;
-import hu.adatba.DAO.OrderDAO;
+import hu.adatba.DAO.StatisticsDAO;
 import hu.adatba.Model.QueryResult;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 public class StatisticsController {
@@ -26,15 +25,25 @@ public class StatisticsController {
     @FXML
     private Button cancelBTN;
 
-    private final OrderDAO orderDAO = new OrderDAO();
+    private final StatisticsDAO statisticsDAO = new StatisticsDAO();
 
-    public StatisticsController() throws SQLException {
-    }/*
+    public StatisticsController() {
+    }
 
     // Metódusok
     @FXML
     public void initialize() {
-        queryCB.getItems().addAll("Törzsvásárlók rendeléseinek száma", "Felhasználónként összes elköltött pénz", "Akciós rendelések könyvcímekkel", "Éves könyveladás", "Műfajonként eladott könyvek száma");
+        queryCB.getItems().addAll(
+                "Műfajonként hány könyv van",
+                "Felhasználók rendelési száma",
+                "TOP 5 legtöbbet rendelt könyv",
+                "Törzsvásárlók (legalább 3 rendelés)",
+                "Rendelések összértéke havonta",
+                "Átlagos könyvár műfajonként",
+                "Legtöbbet választott könyv",
+                "Csak egy rendeléses felhasználók",
+                "Felhasználók összes költése"
+                );
         queryCB.setValue("Éves könyveladás");  // Default
 
         firstTC.setCellValueFactory(new PropertyValueFactory<>("firstValue"));
@@ -57,19 +66,27 @@ public class StatisticsController {
     @FXML
     private void handleQuerySelection() {
         String selectedQuery = queryCB.getValue();
-        List<QueryResult> books = orderDAO.getQueryResults(4);
+        List<QueryResult> books = statisticsDAO.getQueryResults(3);
 
         switch (selectedQuery) {
-            case "Törzsvásárlók rendeléseinek száma":
-                books = orderDAO.getQueryResults(1); break;
-            case "Felhasználónként összes elköltött pénz":
-                books = orderDAO.getQueryResults(2); break;
-            case "Akciós rendelések könyvcímekkel":
-                books = orderDAO.getQueryResults(3); break;
-            case "Éves könyveladás":
-                books = orderDAO.getQueryResults(4); break;
-            case "Műfajonként eladott könyvek száma":
-                books = orderDAO.getQueryResults(5); break;
+            case "Műfajonként hány könyv van":
+                books = statisticsDAO.getQueryResults(1); break;
+            case "Felhasználók rendelési száma":
+                books = statisticsDAO.getQueryResults(2); break;
+            case "TOP 5 legtöbbet rendelt könyv":
+                books = statisticsDAO.getQueryResults(3); break;
+            case "Törzsvásárlók (legalább 3 rendelés)":
+                books = statisticsDAO.getQueryResults(4); break;
+            case "Rendelések összértéke havonta":
+                books = statisticsDAO.getQueryResults(5); break;
+            case "Átlagos könyvár műfajonként":
+                books = statisticsDAO.getQueryResults(6); break;
+            case "Legtöbbet választott könyv":
+                books = statisticsDAO.getQueryResults(7); break;
+            case "Csak egy rendeléses felhasználók":
+                books = statisticsDAO.getQueryResults(8); break;
+            case "Felhasználók összes költése":
+                books = statisticsDAO.getQueryResults(9); break;
         }
 
         queryTV.setItems(FXCollections.observableArrayList(books));
@@ -77,5 +94,5 @@ public class StatisticsController {
 
     private void cancel() throws IOException {
         App.setRoot("list_books");
-    }*/
+    }
 }

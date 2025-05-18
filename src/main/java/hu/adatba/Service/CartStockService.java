@@ -15,7 +15,7 @@ public class CartStockService {
 
     private final CartStockDAO cartStockDAO;
 
-    public CartStockService() throws SQLException{
+    public CartStockService() {
         this.cartStockDAO = new CartStockDAO();
     }
 

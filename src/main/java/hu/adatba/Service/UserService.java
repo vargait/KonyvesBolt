@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +17,7 @@ public class UserService {
 
     private final UserDAO userDAO;
 
-    public UserService() throws SQLException {
+    public UserService() {
         this.userDAO = new UserDAO();
     }
 

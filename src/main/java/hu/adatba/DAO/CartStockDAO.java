@@ -37,43 +37,15 @@ public class CartStockDAO {
         }
         return null;
     }
-    /*
-    public List<CartStock> findCartStocksByCartID(int CartID) {
-        List<CartStock> cartStocks = new ArrayList<>();
-        String sql = "SELECT * FROM KOSARTETEL WHERE KOSARID = ?";
-        try (Connection conn = DBConnect.getConnection()) {
-            assert conn != null;
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, CartID);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    while (rs.next()) {
-                        CartStock cartStock = new CartStock(
-                                rs.getInt("KONYVID"),
-                                rs.get
-                        );
-                        cartStocks.add(getCartStock(rs));
-                        logger.log(Level.INFO,"KosárTétel lekérése sikeres");
-                        return cartStocks;
-                    }
-                }
-            }
-        }catch(SQLException e){
-            logger.log(Level.SEVERE, "KosárTétel lekérése sikertelen: ", e);
-        }
-        return null;
-    }
-
-     */
 
 
     private CartStock getCartStock(ResultSet rs) throws SQLException{
-        CartStock cartStock = new CartStock(
+        return new CartStock(
                 rs.getInt("KOSARID"),
                 rs.getInt("KONYVID"),
                 rs.getInt("MENNYISEG"),
                 rs.getInt("EGYSEGAR")
         );
-        return cartStock;
     }
     public boolean insertCartStock(CartStock cartStock){
         String sql = "INSERT INTO KOSARTETEL (KOSARID, KONYVID, MENNYISEG, EGYSEGAR) VALUES (?, ?, ?, ?)";
