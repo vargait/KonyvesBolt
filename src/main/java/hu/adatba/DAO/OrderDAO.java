@@ -24,9 +24,19 @@ public class OrderDAO {
                 rs.getString("Card_Number")
         );
     }
+        public void callCopyCartToOrder(int orderID) {
+            try (Connection conn = DBConnect.getConnection()) {
+
+                CallableStatement stmt = conn.prepareCall("{call CopyKosarToRendeles(?)}");
+                stmt.setInt(1, orderID);
+                stmt.execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
 
-    public boolean insertOrder(Order order){
+            public boolean insertOrder(Order order){
         String sql = "INSERT INTO RENDELES (USERID, RENDELES_DATUM, VEGOSSZEG, SZAMLAZASI_CIM, FELHASZNALONEV, KARTYASZAM) VALUES(?,?,?,?,?,?)";
         try(Connection conn = DBConnect.getConnection()){
             assert conn!= null;

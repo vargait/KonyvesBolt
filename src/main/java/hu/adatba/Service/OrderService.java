@@ -21,6 +21,7 @@ public class OrderService {
 
     public boolean addOrder(int UserID, int Order_Date, int End_Price, String Billing_address, String userName, String card_Number ){
         Order order = new Order(UserID, Order_Date, End_Price, Billing_address, userName, card_Number);
+        orderDAO.callCopyCartToOrder(UserID);
         return orderDAO.insertOrder(order);
     }
 
