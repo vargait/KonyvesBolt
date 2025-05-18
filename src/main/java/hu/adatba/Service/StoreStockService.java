@@ -33,4 +33,7 @@ public class StoreStockService {
         return storeStockDAO.findStoreStockByBookIDAndStoreID(StoreID, BookID);
     }
 
+    public boolean updateStock(int newStock, int StoreID, int BookID) throws SQLException {
+        return storeStockDAO.updateStock(newStock, StoreID, BookID);
+    }
 }

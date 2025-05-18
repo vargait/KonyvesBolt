@@ -5,9 +5,7 @@ import hu.adatba.Model.Book;
 import hu.adatba.Model.Cart;
 import hu.adatba.Model.MyCartItem;
 import hu.adatba.Model.Store;
-import hu.adatba.Service.CartService;
-import hu.adatba.Service.CartStockService;
-import hu.adatba.Service.OrderService;
+import hu.adatba.Service.*;
 import hu.adatba.Session;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,7 +24,6 @@ import java.util.logging.Logger;
 
 public class MyCartController {
 
-    private final OrderService orderService = new OrderService();
     private final CartService cartService = new CartService();
     private final CartStockService cartStockService = new CartStockService();
     private  Cart usedCart;

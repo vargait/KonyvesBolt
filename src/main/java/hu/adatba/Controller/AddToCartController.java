@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AddToCartController {
     // Adattagok
@@ -46,6 +48,9 @@ public class AddToCartController {
     private Book selectedBook;
     private Store selectedStore;
     private Cart usedCart;
+    private int selectedStock;
+
+    private static final Logger logger = Logger.getLogger(AddToCartController.class.getName());
 
 
     public AddToCartController() throws SQLException {
@@ -100,22 +105,22 @@ public class AddToCartController {
                     selectedStoreT.setText("Kiválasztott áruház: " + selectedStore.getStoreName());
 
                     // Készlet
-                    int stock = 0;
+                    selectedStock = 0;
                     try {
-                        stock = storeStockService.getStockByStoreAndBook(selectedStore.getStoreID(), selectedBook.getBookID()).getOnStock();
+                        selectedStock = storeStockService.getStockByStoreAndBook(selectedStore.getStoreID(), selectedBook.getBookID()).getOnStock();
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
 
                     // Darabszám kiválasztása 1-készlet
                     List<Integer> count = new ArrayList<>();
-                    for (int i = 1; i <= stock; i++) {
+                    for (int i = 1; i <= selectedStock; i++) {
                         count.add(i);
                     }
                     ObservableList<Integer> options = FXCollections.observableArrayList(count);
                     SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(options);
                     stockSP.setValueFactory(valueFactory);
-                    stockT.setText(stock + " db készleten.");
+                    stockT.setText(selectedStock + " db készleten.");
                 });
             }
 
@@ -140,6 +145,12 @@ public class AddToCartController {
         if(selectedStore != null || cartStock != null){
             if(cartStockService.addCartStock(usedCart.getKosarID(),selectedBook.getBookID(), stockSP.getValue(), selectedBook.getPrice())){
                 messageLabel.setText("Sikeres kosárba rakás!");
+                int newStock = selectedStock - stockSP.getValue();
+                if(storeStockService.updateStock(newStock, selectedStore.getStoreID(), selectedBook.getBookID())){
+                    logger.log(Level.INFO, "Készlet változtatása sikeres");
+                } else{
+                    logger.log(Level.SEVERE, "Készlet változtatása sikertelen");
+                }
             }else {
                 messageLabel.setText("Hozzáadás sikertelen");
             }

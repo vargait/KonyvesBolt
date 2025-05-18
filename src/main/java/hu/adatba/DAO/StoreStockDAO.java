@@ -86,4 +86,23 @@ public class StoreStockDAO {
         }
         return storeStocks;
     }
+
+    public boolean updateStock(int newStock, int storeID, int bookID) {
+        String sql = "UPDATE ARUHAZKESZLET " +
+                "SET DARAB_RAKTARON = ? " +
+                "WHERE ARUHAZID = ? AND KONYVID = ?";
+        try (Connection conn = DBConnect.getConnection()){
+            assert conn != null;
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, newStock);
+                stmt.setInt(2, storeID);
+                stmt.setInt(3, bookID);
+
+                int rowsUpdated = stmt.executeUpdate();
+                return rowsUpdated > 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
