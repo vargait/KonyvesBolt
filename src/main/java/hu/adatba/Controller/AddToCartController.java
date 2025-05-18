@@ -60,6 +60,13 @@ public class AddToCartController {
     @FXML
     public void initialize() {
         user = Session.getUser();
+        if(user.getRole().equals("felhasznalo")) {
+            cartService.addCart(Session.getUser().getUserID(), 2025);
+        } else if(user.getRole().equals("latogato")) {
+            cartService.addGuestCart();
+        }
+
+
         selectedBook = Session.getSelectedBook();
         selectedBookT.setText(selectedBook.getAuthor() + " - " + selectedBook.getTitle() + " készlet:");
         usedCart = cartService.findCartByUserID(user.getUserID());

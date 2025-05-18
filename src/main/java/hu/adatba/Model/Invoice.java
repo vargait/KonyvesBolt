@@ -1,28 +1,57 @@
 package hu.adatba.Model;
 
+import hu.adatba.Service.BookService;
+import hu.adatba.Service.OrderService;
+
 public class Invoice {
-    private int InvoiceID;
-    private int Year;
-    private int Price;
-    private String Title;
+    private int OrderID;
     private String FullName;
+    private int Date;
     private String Address;
+    private int CreditNumber;
+    private String BookCount;
+    private int TotalPrice;
 
-    public Invoice(int InvoiceID, int Year, int Price, String Title, String FullName, String Address) {
-        this.InvoiceID = InvoiceID;
-        this.Year = Year;
-        this.Price = Price;
-        this.Title = Title;
+    public Invoice(int OrderID, String FullName, int Date, String Address, int CreditNumber, String BookCount, int TotalPrice) {
+        this.OrderID = OrderID;
         this.FullName = FullName;
+        this.Date = Date;
         this.Address = Address;
+        this.CreditNumber = CreditNumber;
+        this.BookCount = BookCount;
+        this.TotalPrice = TotalPrice;
     }
 
-    public int getInvoiceID() {
-        return InvoiceID;
+    public int getOrderID() {
+        return OrderID;
     }
 
-    public void setInvoiceID(int invoiceID) {
-        InvoiceID = invoiceID;
+    public void setOrderID(int orderID) {
+        OrderID = orderID;
+    }
+
+    public int getTotalPrice() {
+        return TotalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        TotalPrice = totalPrice;
+    }
+
+    public String getBookCount() {
+        return BookCount;
+    }
+
+    public void setBookCount(String bookCount) {
+        BookCount = bookCount;
+    }
+
+    public int getCreditNumber() {
+        return CreditNumber;
+    }
+
+    public void setCreditNumber(int creditNumber) {
+        CreditNumber = creditNumber;
     }
 
     public String getAddress() {
@@ -33,35 +62,19 @@ public class Invoice {
         Address = address;
     }
 
+    public int getDate() {
+        return Date;
+    }
+
+    public void setDate(int date) {
+        Date = date;
+    }
+
     public String getFullName() {
         return FullName;
     }
 
     public void setFullName(String fullName) {
         FullName = fullName;
-    }
-
-    public String getTitle() {
-        return Title;
-    }
-
-    public void setTitle(String title) {
-        Title = title;
-    }
-
-    public int getPrice() {
-        return Price;
-    }
-
-    public void setPrice(int price) {
-        Price = price;
-    }
-
-    public int getYear() {
-        return Year;
-    }
-
-    public void setYear(int year) {
-        Year = year;
     }
 }

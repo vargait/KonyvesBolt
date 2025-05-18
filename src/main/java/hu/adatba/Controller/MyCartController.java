@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableView;
+import javafx.scene.text.Text;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public class MyCartController {
     @FXML
     TextField billingAddressTF, userNameTF, cardNumberTF;
     @FXML
+    Text  text1, text2, text3;
+    @FXML
     TableView<MyCartItem> myStockTV;
     @FXML
     TableColumn<MyCartItem, Integer> cartitemAmountTC, cartitemPriceTC, cartitemTotalTC;
@@ -54,6 +58,7 @@ public class MyCartController {
     //Metódusok
 
     public void initialize() {
+
         if(Session.getUser().getRole().equals("admin")) {
             // Összes cart listázása
             myCartID.setCellValueFactory(new PropertyValueFactory<>("kosarID"));
@@ -65,6 +70,13 @@ public class MyCartController {
             myTV.setItems(FXCollections.observableArrayList(carts));
             myTV.setVisible(true);
             myStockTV.setVisible(false);
+            handleOrderBTN.setVisible(false);
+            billingAddressTF.setVisible(false);
+            userNameTF.setVisible(false);
+            cardNumberTF.setVisible(false);
+            text1.setVisible(false);
+            text2.setVisible(false);
+            text3.setVisible(false);
         }
         else{
             //Saját CartStockjaim listázása
@@ -89,6 +101,11 @@ public class MyCartController {
 
             List<MyCartItem> cartItems = cartStockService.getMyCartStocks(myCartID);
             myStockTV.setItems(FXCollections.observableArrayList(cartItems));
+
+            User user = Session.getUser();
+            billingAddressTF.setText(user.getPostalAddress());
+            userNameTF.setText(user.getFullName());
+            cardNumberTF.setText(user.getCreditNumber());
         }
 
         getbackBTN.setOnAction(e -> {
@@ -190,11 +207,18 @@ public class MyCartController {
             }
             if (orderService.addOrder(Session.getUser().getUserID(), 2025, sum, billing_Address, userName, card_Number)) {
                 messageLabel.setText("Sikeres rendeles!");
+                if(Session.getUser().getRole().equals("felhasznalo")){
+                    cartService.deleteCartByUserID(Session.getUser().getUserID());
+                } else if(Session.getUser().getRole().equals("latogato")){
+                    cartService.deleteCartByUserID(0);
+                }
+                switchToListBooks();
             } else {
                 messageLabel.setText("Sikertelen rendeles!");
             }
         }catch(RuntimeException e){
             messageLabel.setText("Sikertelen rendeles! sql/runtim");
+            logger.log(Level.SEVERE, e.getMessage());
         }
     }
 

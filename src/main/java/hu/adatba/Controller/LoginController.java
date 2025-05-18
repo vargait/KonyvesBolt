@@ -80,7 +80,6 @@ public class LoginController {
         if (user != null) {
             Session.setUser(user);
             messageLabel.setText("Sikeres bejelentkezés!");
-            cartService.addCart(Session.getUser().getUserID(), 2025);
             App.setRoot("list_books");
         } else {
             messageLabel.setText("Helytelen adatok!");
@@ -91,7 +90,6 @@ public class LoginController {
         User user = userService.loginAsGuest();
         Session.setUser(user);
         cartService.deleteCartByUserID(0);
-        cartService.addGuestCart();
         messageLabel.setText("Sikeres bejelentkezés!");
         App.setRoot("list_books");
     }

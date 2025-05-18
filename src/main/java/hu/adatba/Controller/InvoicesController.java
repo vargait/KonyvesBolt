@@ -7,7 +7,6 @@ import hu.adatba.Session;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,39 +21,32 @@ public class InvoicesController {
     TableView<Invoice> invoicelistTV;
 
     @FXML
-    TableColumn<Invoice, Integer> invoiceidTC, dateTC, priceTC, titleTC, fullnameTC, addressTC;
+    TableColumn<Invoice, Integer> orderidTC,  dateTC,  creditnumberTC, countTC, totalpriceTC;
 
     @FXML
-    private ComboBox<String> queryCB;
+    TableColumn<Invoice, String> fullnameTC, addressTC;
 
     @FXML
     private Button getbackBTN;
 
     private final InvoiceService invoiceService = new InvoiceService();
 
-    public InvoicesController() throws SQLException {
-    }/*
+    public InvoicesController() {
+    }
 
     // Metódusok
     @FXML
-    public void initialize() {
-        if(Session.getUser().getRole().equals("admin")) {
-            queryCB.setVisible(true);
-        }
-
-        queryCB.getItems().addAll("Bejelentkezett felhasználók", "Vendég felhasználók");
-        queryCB.setValue("Bejelentkezett felhasználók");
-
-        invoiceidTC.setCellValueFactory(new PropertyValueFactory<>("invoiceID"));
-        dateTC.setCellValueFactory(new PropertyValueFactory<>("year"));
-        priceTC.setCellValueFactory(new PropertyValueFactory<>("price"));
-        titleTC.setCellValueFactory(new PropertyValueFactory<>("title"));
+    public void initialize() throws SQLException {
+        orderidTC.setCellValueFactory(new PropertyValueFactory<>("orderID"));
         fullnameTC.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        dateTC.setCellValueFactory(new PropertyValueFactory<>("date"));
         addressTC.setCellValueFactory(new PropertyValueFactory<>("address"));
+        creditnumberTC.setCellValueFactory(new PropertyValueFactory<>("creditNumber"));
+        countTC.setCellValueFactory(new PropertyValueFactory<>("bookCount"));
+        totalpriceTC.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
 
-        queryCB.setOnAction(e -> myInvoicesToTable());
-
-        myInvoicesToTable();
+        List<Invoice> invoices = invoiceService.getAllInvoices(Session.getUser().getUserID());
+        invoicelistTV.setItems(FXCollections.observableArrayList(invoices));
 
 
         getbackBTN.setOnAction(e -> {
@@ -65,21 +57,6 @@ public class InvoicesController {
             }
         });
     }
-
-    @FXML
-    private void myInvoicesToTable(){
-        String selectedQuery = queryCB.getValue();
-        List<Invoice> invoices = invoiceService.getAllInvoices("felhasznalo");
-
-        switch (selectedQuery) {
-            case "Bejelentkezett felhasználók": invoices = invoiceService.getAllInvoices("felhasznalo"); break;
-            case "Vendég felhasználók": invoices = invoiceService.getAllInvoices("latogato"); break;
-        }
-
-
-        invoicelistTV.setItems(FXCollections.observableArrayList(invoices));
-
-    }*/
 
     private void switchToListBooks() throws IOException {
         App.setRoot("list_books");

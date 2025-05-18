@@ -31,9 +31,9 @@
       </TableView>
       <Button fx:id="handleOrderBTN" layoutX="587.0" layoutY="272.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Megrendelem" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text layoutX="604.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Számlázási cím:" />
-      <Text layoutX="604.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Felhasználónév:" />
-      <Text layoutX="601.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kártyaszám:" />
+      <Text fx:id="text1" layoutX="604.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Számlázási cím:" />
+      <Text fx:id="text2" layoutX="604.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Felhasználónév:" />
+      <Text fx:id="text3" layoutX="601.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kártyaszám:" />
       <TextField fx:id="billingAddressTF" layoutX="603.0" layoutY="93.0" />
       <TextField fx:id="userNameTF" layoutX="603.0" layoutY="149.0" />
       <TextField fx:id="cardNumberTF" layoutX="603.0" layoutY="213.0" />

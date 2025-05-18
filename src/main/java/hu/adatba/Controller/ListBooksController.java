@@ -111,12 +111,13 @@ public class ListBooksController {
                 addgenresBTN.setVisible(true);
                 statBTN.setVisible(true);
                 switchToAddStoreBTN.setVisible(true);
-
+                invoicesBTN.setVisible(false);
             }
             if(!user.getRole().equals("latogato")) {
                 editprofileBTN.setVisible(true);
                 mycartBTN.setVisible(true);
-                invoicesBTN.setVisible(true);
+            }else{
+                invoicesBTN.setVisible(false);
             }
         }
 
