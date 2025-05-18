@@ -81,30 +81,20 @@ public class EditBookController {
         valueFactory.setValue(Session.getSelectedBook().getEbook());
         editbookebookSP.setValueFactory(valueFactory);
 
-        // Műfaj Spinner
-        options = FXCollections.observableArrayList(genreService.getGenres());
-        valueFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(options);
-        valueFactory.setValue(Session.getSelectedBook().getGenre().getGenreName());
-        editbookgenreSP.setValueFactory(valueFactory);
+        // Műfaj spinnerek
+        List<String> genres = genreService.getGenres();
+        SpinnerValueFactory.ListSpinnerValueFactory<String> genreFactory =
+                new SpinnerValueFactory.ListSpinnerValueFactory<>(FXCollections.observableArrayList(genres));
+        genreFactory.setValue(Session.getSelectedBook().getGenre().getGenreName());
+        editbookgenreSP.setValueFactory(genreFactory);
 
-        // Alműfaj Spinner
+        setupSubgenreSpinner(genreFactory.getValue());
+
         editbookgenreSP.valueProperty().addListener((obs, oldGenre, newGenre) -> {
-            List<String> subgenres = genreService.getSubGenres(newGenre);
-            ObservableList<String> subgenreOptions = FXCollections.observableArrayList(subgenres);
-            SpinnerValueFactory<String> subgenreFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(subgenreOptions);
-            subgenreFactory.setValue(subgenres.isEmpty() ? "" : subgenres.get(0));
-            subgenreFactory.setValue(Session.getSelectedBook().getGenre().getSubGenreName());
-            editbooksubgenreSP.setValueFactory(subgenreFactory);
+            setupSubgenreSpinner(newGenre);
         });
 
-        // Alapértelmezett alműfaj beállítása az első műfaj alapján
-        List<String> genres = genreService.getGenres();
-        if (!genres.isEmpty()) {
-            List<String> initialSubgenres = genreService.getSubGenres(genres.get(0));
-            SpinnerValueFactory<String> initialSubgenreFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(FXCollections.observableArrayList(initialSubgenres));
-            initialSubgenreFactory.setValue(Session.getSelectedBook().getGenre().getGenreName());
-            editbooksubgenreSP.setValueFactory(initialSubgenreFactory);
-        }
+
 
         // Gombok
         editbookpostBTN.setOnAction(e -> {
@@ -121,6 +111,28 @@ public class EditBookController {
                 throw new RuntimeException(ex);
             }
         });
+    }
+
+    private void setupSubgenreSpinner(String selectedGenre) {
+        List<String> subgenres = genreService.getSubGenres(selectedGenre);
+        ObservableList<String> subgenreOptions = FXCollections.observableArrayList(subgenres);
+
+        SpinnerValueFactory.ListSpinnerValueFactory<String> subgenreFactory =
+                (SpinnerValueFactory.ListSpinnerValueFactory<String>) editbooksubgenreSP.getValueFactory();
+
+        if (subgenreFactory == null) {
+            subgenreFactory = new SpinnerValueFactory.ListSpinnerValueFactory<>(subgenreOptions);
+            editbooksubgenreSP.setValueFactory(subgenreFactory);
+        } else {
+            subgenreFactory.setItems(subgenreOptions);
+        }
+
+        String targetSub = Session.getSelectedBook().getGenre().getSubGenreName();
+        if (subgenres.contains(targetSub)) {
+            subgenreFactory.setValue(targetSub);
+        } else {
+            subgenreFactory.setValue(subgenres.isEmpty() ? "" : subgenres.get(0));
+        }
     }
 
     private void handleSave() throws IOException {

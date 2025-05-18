@@ -2,11 +2,10 @@ package hu.adatba.DAO;
 
 import hu.adatba.Model.Book;
 import hu.adatba.db.DBConnect;
+import oracle.jdbc.OracleConnectionWrapper;
+import oracle.jdbc.OracleTypes;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -199,7 +198,25 @@ public class BookDAO {
     // Akciós könyvek lekérdezése
     public List<Book> getDiscountedBooks() {
         List<Book> discountedBooks = new ArrayList<>();
-        String sql = "SELECT * FROM KONYV WHERE AKCIOS_E = 1 ORDER BY AR";
+        try (Connection conn = DBConnect.getConnection()){
+            assert conn != null;
+            try (CallableStatement stmt = conn.prepareCall("{call LISTAZ_AKCIOS_KONYVEK(?, ?)}")){
+                stmt.setDouble(1, 2000);
+                stmt.registerOutParameter(2, Types.REF_CURSOR);
+                stmt.execute();
+
+                ResultSet rs = (ResultSet) stmt.getObject(2);
+                while (rs.next()) {
+                    discountedBooks.add(getBook(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+        /*String sql = "SELECT * FROM KONYV WHERE AKCIOS_E = 1 ORDER BY AR";
         try (Connection conn = DBConnect.getConnection()) {
             assert conn != null;
             try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()){
@@ -209,7 +226,7 @@ public class BookDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         return discountedBooks;
     }
 
