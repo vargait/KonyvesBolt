@@ -1,6 +1,7 @@
 package hu.adatba.DAO;
 
 import hu.adatba.Model.CartStock;
+import hu.adatba.Model.MyCartItem;
 import hu.adatba.db.DBConnect;
 
 import java.sql.Connection;
@@ -70,16 +71,22 @@ public class CartStockDAO {
         return false;
     }
 
-    public List<CartStock> getMyCartStocks(int CartID){
-        List<CartStock> cStocks = new ArrayList<>();
-        String sql = "SELECT * FROM KOSARTETEL WHERE KOSARID=?";
+    public List<MyCartItem> getMyCartStocks(int CartID){
+        List<MyCartItem> cStocks = new ArrayList<>();
+        String sql = "SELECT ko.KONYVID, k.KOSARID FROM KOSARTETEL k" +
+                "    JOIN KONYV ko ON ko.KONYVID = k.KONYVID " +
+                "    WHERE k.KOSARID = ?";
         try (Connection conn = DBConnect.getConnection()) {
             assert conn != null;
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, CartID);
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
-                        cStocks.add(getCartStock(rs));
+                        MyCartItem cartItem = new MyCartItem(
+                                rs.getInt("KONYVID"),
+                                rs.getInt("KOSARID")
+                        );
+                        cStocks.add(cartItem);
                     }
                 }
             }
@@ -87,5 +94,22 @@ public class CartStockDAO {
             throw new RuntimeException(e);
         }
         return cStocks;
+    }
+
+
+    public boolean deleteFromCart(int cartID, int bookID) {
+        String sql = "DELETE FROM KOSARTETEL WHERE KONYVID = ? AND KOSARID = ?";
+        try (Connection conn = DBConnect.getConnection()){
+            assert conn != null;
+            try (PreparedStatement stmt = conn.prepareStatement(sql)){
+                stmt.setInt(1, bookID);
+                stmt.setInt(2, cartID);
+
+                int rowsDeleted = stmt.executeUpdate();
+                return rowsDeleted > 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

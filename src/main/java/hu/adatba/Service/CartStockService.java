@@ -2,6 +2,7 @@ package hu.adatba.Service;
 
 import hu.adatba.DAO.CartStockDAO;
 import hu.adatba.Model.CartStock;
+import hu.adatba.Model.MyCartItem;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,7 +19,7 @@ public class CartStockService {
         this.cartStockDAO = new CartStockDAO();
     }
 
-    public List<CartStock> getMyCartStocks(int CartID){
+    public List<MyCartItem> getMyCartStocks(int CartID){
         return cartStockDAO.getMyCartStocks(CartID);
     }
     public boolean addCartStock(int CartID, int BookID, int Quantity, int PrizeEach){
@@ -30,4 +31,8 @@ public class CartStockService {
         return false;
     }
     public CartStock findCartStockByCartIDAndBookID(int CartID, int BookID){return cartStockDAO.findCartStockByCartIDAndBookID(CartID, BookID);}
+
+    public boolean deleteFromCart(int cartID, int bookID) {
+        return cartStockDAO.deleteFromCart(cartID, bookID);
+    }
 }

@@ -64,7 +64,7 @@ public class ListBooksController {
     private Button editprofileBTN;
 
     @FXML
-    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, myordersBTN, invoicesBTN, discountedBTN, switchToAddStoreBTN;
+    private Button addbooksBTN, logoutBTN, addgenresBTN, searchBTN, bestsellerBTN, statBTN, mycartBTN, invoicesBTN, discountedBTN, switchToAddStoreBTN;
 
     @FXML
     private TextField searchTF;
@@ -115,7 +115,7 @@ public class ListBooksController {
             }
             if(!user.getRole().equals("latogato")) {
                 editprofileBTN.setVisible(true);
-                myordersBTN.setVisible(true);
+                mycartBTN.setVisible(true);
                 invoicesBTN.setVisible(true);
             }
         }
@@ -151,9 +151,9 @@ public class ListBooksController {
 
         discountedBTN.setOnAction(e -> listDiscountedBooks());
 
-        myordersBTN.setOnAction(e -> {
+        mycartBTN.setOnAction(e -> {
             try {
-                switchToMyOrders();
+                switchToMyCart();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -308,8 +308,8 @@ public class ListBooksController {
     private void switchToAddGenres() throws IOException{
         App.setRoot("add_genres");
     }
-    private void switchToMyOrders() throws IOException{
-        App.setRoot("my_orders");
+    private void switchToMyCart() throws IOException{
+        App.setRoot("my_cart");
     }
     private void switchToAddStores() throws IOException{
         App.setRoot("stores");

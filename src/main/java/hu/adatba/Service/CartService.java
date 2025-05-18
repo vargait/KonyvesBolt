@@ -28,8 +28,8 @@ public class CartService {
 
 
 
-    public List<Cart> getMyCarts(int UserID){
-        return cartDAO.getMyCarts(UserID);
+    public List<Cart> getAllCarts(){
+        return cartDAO.getAllCarts();
     }
 
     public boolean insertBook(int CartID, int UserID, int Amount, int Price) throws SQLException {
@@ -38,5 +38,9 @@ public class CartService {
 
     public Cart findCartByUserID(int UserID){
         return cartDAO.findCartByUserID(UserID);
+    }
+
+    public boolean deleteCartByUserID(int UserID){
+        return cartDAO.deleteCartByUserID(UserID);
     }
 }

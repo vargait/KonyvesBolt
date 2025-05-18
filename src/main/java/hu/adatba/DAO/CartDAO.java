@@ -19,14 +19,13 @@ public class CartDAO {
 
 
 
-    public List<Cart> getMyCarts(int userID) {
+    public List<Cart> getAllCarts() {
         List<Cart> carts = new ArrayList<>();
-        String sql = "SELECT * FROM KOSAR WHERE USERID = ?";
+        String sql = "SELECT * FROM KOSAR ORDER BY KOSARID";
 
         try (Connection conn = DBConnect.getConnection()) {
             assert conn != null;
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, userID);
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         carts.add(getCart(rs));
@@ -72,7 +71,7 @@ public class CartDAO {
 
 
     public boolean createCart(Cart cart) {
-        String sql = "INSERT INTO KOSAR (USERID, LETREHOZAS_EV) VALUES(?, ?)";
+        String sql = "INSERT INTO KOSAR (USERID, LETREHOZAS_DATUMA) VALUES(?, ?)";
         try (Connection conn = DBConnect.getConnection()) {
             assert conn != null;
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -114,6 +113,20 @@ public class CartDAO {
                     return false;
                 }
             }
+        }
+    }
+
+    public boolean deleteCartByUserID(int userID) {
+        String sql = "DELETE FROM KOSAR WHERE USERID = ?";
+        try (Connection conn = DBConnect.getConnection()){
+            assert conn != null;
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, userID);
+                int rowsDeleted = stmt.executeUpdate();
+                return rowsDeleted > 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

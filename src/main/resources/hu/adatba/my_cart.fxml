@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.MyCartController">
+   <children>
+       <ComboBox fx:id="queryCB" layoutX="171.0" layoutY="14.0" prefHeight="25.0" prefWidth="258.0" visible="false" />
+      <TableView fx:id="myStockTV" layoutX="55.0" layoutY="49.0" prefHeight="316.0" prefWidth="389.0">
+        <columns>
+          <TableColumn fx:id="cartitemAuthorTC" prefWidth="75.0" text="Szerző" />
+            <TableColumn fx:id="cartitemTitleTC" prefWidth="75.0" text="Cím" />
+            <TableColumn fx:id="cartitemAmountTC" prefWidth="100.0" text="Mennyiség" />
+            <TableColumn fx:id="cartitemPriceTC" prefWidth="70.0" text="Egységár" />
+            <TableColumn fx:id="cartitemTotalTC" prefWidth="70.0" text="Összeg" />
+        </columns>
+      </TableView>
+      <Button fx:id="getbackBTN" layoutX="30.0" layoutY="14.0" mnemonicParsing="false" text="Vissza" />
+      <TableView fx:id="myTV" layoutX="510.0" layoutY="49.0" prefHeight="200.0" prefWidth="296.0" visible="false">
+        <columns>
+          <TableColumn fx:id="myCartID" prefWidth="75.0" text="KOSARID" />
+          <TableColumn fx:id="myUserID" prefWidth="75.0" text="USERID" />
+            <TableColumn fx:id="myDate" prefWidth="145.0" text="LETREHOZAS_DATUMA" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

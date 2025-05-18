@@ -64,4 +64,8 @@ public class BookService {
     public List<Integer> getBooks(){
         return bookDAO.getBooksFromDB();
     }
+
+    public Book getBookByID(int BookID) {
+        return bookDAO.findBookByBookID(BookID);
+    }
 }

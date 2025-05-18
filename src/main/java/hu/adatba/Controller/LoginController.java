@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import hu.adatba.App;
 import hu.adatba.Model.User;
+import hu.adatba.Service.CartService;
 import hu.adatba.Service.UserService;
 import hu.adatba.Session;
 import javafx.fxml.FXML;
@@ -38,6 +39,7 @@ public class LoginController {
     private Label messageLabel;
 
     private final UserService userService = new UserService();
+    private final CartService cartService = new CartService();
     private static final Logger logger = Logger.getLogger(LoginController.class.getName());
 
     public LoginController() throws SQLException {
@@ -77,6 +79,7 @@ public class LoginController {
         if (user != null) {
             Session.setUser(user);
             messageLabel.setText("Sikeres bejelentkezés!");
+            cartService.addCart(Session.getUser().getUserID(), 2025);
             App.setRoot("list_books");
         } else {
             messageLabel.setText("Helytelen adatok!");
