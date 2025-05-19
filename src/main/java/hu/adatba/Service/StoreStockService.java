@@ -22,8 +22,10 @@ public class StoreStockService {
         if(storeStockDAO.findStoreStockByBookIDAndStoreID(StoreID, BookID)== null){
             return storeStockDAO.insertStoreStock(storeStock);
         }
-        logger.log(Level.INFO, "A keszlet mar letezik");
-        return false;
+        else{
+            logger.log(Level.INFO, "A keszlet mar letezik, FELTOLT_KESZLET Procedure");
+            return storeStockDAO.updateStock(storeStock);
+        }
     }
     public List<StoreStock> getStoreStocks(){
         return storeStockDAO.getAllStoreStocks();
@@ -31,9 +33,5 @@ public class StoreStockService {
 
     public StoreStock getStockByStoreAndBook(int StoreID, int BookID) throws SQLException {
         return storeStockDAO.findStoreStockByBookIDAndStoreID(StoreID, BookID);
-    }
-
-    public boolean updateStock(int newStock, int StoreID, int BookID) {
-        return storeStockDAO.updateStock(newStock, StoreID, BookID);
     }
 }

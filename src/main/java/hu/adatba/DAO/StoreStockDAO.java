@@ -3,10 +3,7 @@ package hu.adatba.DAO;
 import hu.adatba.Model.StoreStock;
 import hu.adatba.db.DBConnect;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -86,21 +83,21 @@ public class StoreStockDAO {
         return storeStocks;
     }
 
-    public boolean updateStock(int newStock, int storeID, int bookID) {
-        String sql = "UPDATE ARUHAZKESZLET " +
-                "SET DARAB_RAKTARON = ? " +
-                "WHERE ARUHAZID = ? AND KONYVID = ?";
+    public boolean updateStock(StoreStock storeStock) {
+        String sql = "{ call feltolt_keszlet(?, ?, ?) }";
         try (Connection conn = DBConnect.getConnection()){
             assert conn != null;
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, newStock);
-                stmt.setInt(2, storeID);
-                stmt.setInt(3, bookID);
+            try (CallableStatement stmt = conn.prepareCall(sql)) {
+                stmt.setInt(1, storeStock.getBookID());
+                stmt.setInt(2, storeStock.getShopID());
+                stmt.setInt(3, storeStock.getOnStock());
 
-                int rowsUpdated = stmt.executeUpdate();
-                return rowsUpdated > 0;
+                stmt.execute();
+                logger.log(Level.INFO, "FELTOLT_KESZLET lefutott.");
+                return true;
             }
         } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
