@@ -45,7 +45,7 @@ public class UserService {
         // Jelszó check
         if (verifyPassword(password, user.getPassword())) {
             logger.log(Level.INFO, "Egyeznek a jelszavak");
-            return userDAO.findUserByUsername(username);
+            return user;
         } else {
             logger.log(Level.INFO, "Nem egyeznek a jelszavak");
             return null;
