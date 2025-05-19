@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
@@ -93,6 +94,7 @@ public class StatisticsController {
     }
 
     private void cancel() throws IOException {
-        App.setRoot("list_books");
+        Stage stage = (Stage) cancelBTN.getScene().getWindow();
+        stage.close();
     }
 }

@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -177,6 +178,7 @@ public class EditBookController {
     @FXML
     private void switchToListBooks() throws IOException {
         Session.clearSelectedBook();
-        App.setRoot("list_books");
+        Stage stage = (Stage) editbookcancelBTN.getScene().getWindow();
+        stage.close();
     }
 }

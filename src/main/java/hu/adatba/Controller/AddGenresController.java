@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -101,7 +102,8 @@ public class AddGenresController {
 
     @FXML
     private void switchToListBooks() throws IOException {
-        App.setRoot("list_books");
+        Stage stage = (Stage) addGenresmegseBTN.getScene().getWindow();
+        stage.close();
     }
 }
 

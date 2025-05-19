@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -158,6 +159,7 @@ public class AddStoresController {
     }
 
     private void switchToListBooks() throws IOException {
-        App.setRoot("list_books");
+        Stage stage = (Stage) getBackBTN.getScene().getWindow();
+        stage.close();
     }
 }

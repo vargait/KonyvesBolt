@@ -8,10 +8,14 @@ import hu.adatba.Session;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -100,10 +104,10 @@ public class ListBooksController {
         listdiscountedTC.setCellValueFactory(new PropertyValueFactory<>("discounted"));
         listpriceTC.setCellValueFactory(new PropertyValueFactory<>("price"));
         addActionColumn();
-
         List<Book> books = bookService.getAllBooks();
         listbooksTV.setItems(FXCollections.observableArrayList(books));
         resultcountT.setText(books.size() + " találat");
+
 
         if (user != null) {
             if(user.getRole().equals("admin")) {
@@ -114,6 +118,7 @@ public class ListBooksController {
             }
             else if(user.getRole().equals("felhasznalo")) {
                 invoicesBTN.setVisible(true);
+                editprofileBTN.setVisible(true);
             }
         }
 
@@ -259,16 +264,35 @@ public class ListBooksController {
         listbooksTV.getColumns().add(listActionTC);
     }
     private void switchToInvoices() throws IOException {
-        App.setRoot("invoices");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hu/adatba/invoices.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Invoices");
+        stage.setScene(new Scene(root,800, 600));
+        stage.show();
     }
 
     private void switchToStats() throws IOException {
-        App.setRoot("statistics");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hu/adatba/statistics.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Statisztikák");
+        stage.setScene(new Scene(root,800, 600));
+        stage.show();
     }
 
     private void switchToAddToCart(Book book) throws IOException {
         Session.setSelectedBook(book);
-        App.setRoot("add_to_cart");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hu/adatba/add_to_cart.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Áruházválasztás");
+        stage.setScene(new Scene(root,800, 600));
+        stage.show();
     }
 
     private void switchToEdit(Book book) throws IOException {
@@ -278,12 +302,25 @@ public class ListBooksController {
 
     @FXML
     private void switchToAddBooks() throws IOException {
-        App.setRoot("add_books");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hu/adatba/add_books.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Könyvek hozzáadása");
+        stage.setScene(new Scene(root, 400, 600 ));
+        stage.show();
     }
 
     @FXML
     private void switchToEditProfile() throws IOException {
-        App.setRoot("useredit");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hu/adatba/useredit.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Felhasználó szerkesztése");
+        stage.setScene(new Scene(root));// 400, 600 ));
+        stage.sizeToScene();
+        stage.show();
     }
 
     @FXML
@@ -293,12 +330,31 @@ public class ListBooksController {
     }
     @FXML
     private void switchToAddGenres() throws IOException{
-        App.setRoot("add_genres");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hu/adatba/add_genres.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Műfajok felvitelek");
+        stage.setScene(new Scene(root,400, 600));
+        stage.show();
     }
     private void switchToMyCart() throws IOException{
-        App.setRoot("my_cart");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hu/adatba/my_cart.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Statisztikák");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
     private void switchToAddStores() throws IOException{
-        App.setRoot("stores");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hu/adatba/stores.fxml"));
+        Parent root = fxmlLoader.load();
+
+        Stage stage = new Stage();
+        stage.setTitle("Áruházak kezelése");
+        stage.setScene(new Scene(root,800, 600));
+        stage.show();
     }
 }

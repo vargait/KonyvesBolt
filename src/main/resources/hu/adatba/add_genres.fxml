@@ -11,19 +11,19 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.adatba.Controller.AddGenresController">
     <children>
-        <Text layoutX="201.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Műfaj felvitele">
+        <Text layoutX="96.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Műfaj felvitele">
             <font>
                 <Font size="27.0" />
             </font>
         </Text>
-        <Text layoutX="168.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Műfaj" />
-        <Text layoutX="168.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Alműfaj" />
-        <TextField fx:id="addgenresnameTF" layoutX="233.0" layoutY="71.0" />
-        <TextField fx:id="addgenresecondaryTF" layoutX="233.0" layoutY="100.0" />
-      <Button fx:id="addGenressubmitBTN" layoutX="203.0" layoutY="141.0" mnemonicParsing="false" text="Felvitel" />
-      <Button fx:id="addGenresmegseBTN" layoutX="296.0" layoutY="141.0" mnemonicParsing="false" text="Mégse" />
+        <Text layoutX="63.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Műfaj" />
+        <Text layoutX="63.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Alműfaj" />
+        <TextField fx:id="addgenresnameTF" layoutX="128.0" layoutY="71.0" />
+        <TextField fx:id="addgenresecondaryTF" layoutX="128.0" layoutY="100.0" />
+      <Button fx:id="addGenressubmitBTN" layoutX="98.0" layoutY="141.0" mnemonicParsing="false" text="Felvitel" />
+      <Button fx:id="addGenresmegseBTN" layoutX="191.0" layoutY="141.0" mnemonicParsing="false" text="Mégse" />
       <Label fx:id="messageLabel" layoutX="275.0" layoutY="480.0" textFill="red" />
-      <TableView fx:id="listgenresTV" layoutX="205.0" layoutY="177.0" prefHeight="200.0" prefWidth="205.0">
+      <TableView fx:id="listgenresTV" layoutX="100.0" layoutY="177.0" prefHeight="200.0" prefWidth="205.0">
         <columns>
           <TableColumn fx:id="listgenreTC" prefWidth="99.0" text="Műfajnév" />
           <TableColumn fx:id="listsubgenreTC" prefWidth="105.0" text="Alműfaj" />

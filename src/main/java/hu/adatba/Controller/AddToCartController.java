@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -137,7 +138,8 @@ public class AddToCartController {
     @FXML
     private void switchToListBooks() throws IOException {
         Session.clearSelectedBook();
-        App.setRoot("list_books");
+        Stage stage = (Stage) cancelBTN.getScene().getWindow();
+        stage.close();
     }
 
     private void putItemtoCartStock() throws IOException, SQLException{

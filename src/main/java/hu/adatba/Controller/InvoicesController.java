@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -59,6 +60,7 @@ public class InvoicesController {
     }
 
     private void switchToListBooks() throws IOException {
-        App.setRoot("list_books");
+        Stage stage = (Stage) getbackBTN.getScene().getWindow();
+        stage.close();
     }
 }

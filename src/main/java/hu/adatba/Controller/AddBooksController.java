@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -136,6 +137,7 @@ public class AddBooksController {
 
     @FXML
     private void switchToListBooks() throws IOException {
-        App.setRoot("list_books");
+        Stage stage = (Stage) addbookcancelBTN.getScene().getWindow();
+        stage.close();
     }
 }

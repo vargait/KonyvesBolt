@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -115,6 +116,7 @@ public class UserEditController {
 
     @FXML
     private void switchToListBooks() throws IOException {
-        App.setRoot("list_books");
+        Stage stage = (Stage) editcancelBTN.getScene().getWindow();
+        stage.close();
     }
 }
